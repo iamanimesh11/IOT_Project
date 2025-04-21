@@ -199,7 +199,7 @@ if __name__ == "__main__":
     #     FROM customers.customer_staging;
     # """)
     # current_device_table_names = set(row[0] for row in cur.fetchall())
-    tables_to_mark_fully_missing = existing_customer_tables - current_staging_table_names
+    tables_to_mark_fully_missing = set(existing_customer_tables) - current_staging_table_names
     logging.info(f"Customer tables potentially containing only missing customers: {tables_to_mark_fully_missing}") # Added logging
     for table in tables_to_mark_fully_missing:
         # This logic is simpler and better than trying to parse the name

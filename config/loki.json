@@ -1,0 +1,9 @@
+{
+  "Name": "loki",
+  "Port": 3100,
+  "Tags": ["logging"],
+  "Check": {
+    "HTTP": "http://localhost:3100/ready",
+    "Interval": "10s"
+  }
+}

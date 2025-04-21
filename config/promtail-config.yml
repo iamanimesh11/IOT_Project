@@ -1,0 +1,44 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: "http://loki:3100/loki/api/v1/push"
+
+scrape_configs:
+  - job_name: "airflow"
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: "airflow"
+          __path__: "/opt/airflow/logs/**/*.log"  # ✅ Adjust to match your log mount
+
+    pipeline_stages:
+      # Extract metadata from the log file path
+      - regex:
+          source: filename
+          expression: 'dag_id=(?P<dag_id>[^/]+)/run_id=(?P<run_id>[^/]+)/task_id=(?P<task_id>[^/]+)/attempt=(?P<attempt>\d+).log'
+
+      # Extract fields from log line: timestamp, log_level, and message
+      - regex:
+          expression: '^\[(?P<log_time>[\d\-T:+\.]+)\] \{[^}]+\} (?P<log_level>[A-Z]+) - (?P<log_message>.*)'
+
+      - timestamp:
+          source: log_time
+          format: "2006-01-02T15:04:05.000-0700"
+
+      # Apply extracted fields as labels
+      - labels:
+          dag_id:
+          task_id:
+          run_id:
+          attempt:
+          log_level:
+
+      # Keep only the log message
+      - output:
+          source: log_message

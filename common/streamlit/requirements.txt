@@ -1,0 +1,11 @@
+streamlit
+kafka-python
+streamlit
+pandas
+sqlalchemy 
+plotly
+psycopg2
+requests
+firebase-admin
+streamlit_option_menu
+streamlit_autorefresh

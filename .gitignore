@@ -1,0 +1,13 @@
+loki_data/
+__pycache__/
+shared/info_collected.flag
+shared/start_logged
+shared/user_info
+common/__pycache__/
+common/logging_and_monitoring/logs/*
+!common/logging_and_monitoring/logs/loki_errors
+config.loki_data/
+pipelines/airflow/dags/__pycache__/
+pipelines/kafka_files/__pycache__/
+postgres_data/
+pipelines/airflow/logs

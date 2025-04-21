@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.log
+loki_data/
+grafana_data/
+postgres_data/
+.env

@@ -1,0 +1,7 @@
+* text=auto
+# Force LF line endings for shell scripts and text files
+*.sh text eol=lf
+*.txt text eol=lf
+
+# Force CRLF for certain files (optional, if needed for certain types of files)
+# *.bat text eol=crlf

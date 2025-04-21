@@ -1,0 +1,6 @@
+kafka-python
+requests
+oauthlib
+psycopg2-binary
+geopy
+firebase_admin

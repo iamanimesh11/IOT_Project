@@ -1,0 +1,88 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    networks:
+      - my_custom_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: animesh11
+      POSTGRES_DB: de_personal
+    healthcheck:  # ✅ Ensure PostgreSQL is ready before Airflow starts
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      retries: 5
+      timeout: 3s
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./shared:/shared
+      - ./config/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./config:/app/config # Mount the config directory containing db_initialize.sh
+
+  db_initialization:
+        image: postgres:alpine
+        container_name: db_initialization
+        networks:
+          - my_custom_network
+        dns:
+          - 8.8.8.8
+          - 8.8.4.4
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: animesh11
+          POSTGRES_HOST: postgres # Use the service name as hostname
+        depends_on:
+          - postgres
+        volumes:
+          - ./config:/shared:ro # Mount your script directory as read-only
+        entrypoint: ["/bin/sh", "-c", "ls -l /shared && sleep 5 && /shared/db_initialize.sh"]
+        restart: "no" # Run once and exit after initialization
+
+
+
+  
+  
+  streamlit:
+    build: ./common/streamlit
+    container_name: streamlit2
+    networks:
+      - my_custom_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    ports:
+      - "8501:8501"
+      - "2375:2375"  # Expose Docker port
+
+ 
+    environment:
+      - KAFKA_BROKER=kafka:9092
+    
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Add this line to mount the Docker socket
+      - ./common/streamlit:/app  # Mounts the local "streamlit" folder into the container
+      - ./shared:/shared  
+
+    command: ["streamlit", "run", "main_Streamlit.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.runOnSave=true"]
+
+
+ 
+networks:
+  my_custom_network:
+    driver: bridge  # Or other network driver as needed
+    
+    
+volumes:
+  loki_data:
+  grafana_data:
+  postgres_data:  
+  airflow-logs:
+  airflow-dags:
+  zookeeper_data:
+  kafka_data:

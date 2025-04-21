@@ -2,7 +2,7 @@ import requests
 import math
 import logging,time
 from staging_table_creation import checked_staging_table, create_staging_table, dump_device_data_to_staging
-from Database_connection_Utils import connect_and_create_schemas
+from common.utils.Database_connection_Utils import connect_and_create_schemas
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 

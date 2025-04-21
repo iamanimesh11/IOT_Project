@@ -8,7 +8,7 @@
       <excludeFolder url="file://$MODULE_DIR$/pipelines/airflow/logs" />
       <excludeFolder url="file://$MODULE_DIR$/pipelines/airflow/plugins" />
     </content>
-    <orderEntry type="jdk" jdkName="de_personal" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="IOT_Project" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

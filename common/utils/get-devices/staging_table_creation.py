@@ -7,7 +7,7 @@ import time
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 start_time = time.time()
-from Database_connection_Utils import connect_and_create_schemas
+from common.utils.Database_connection_Utils import connect_and_create_schemas
 
 db_connection = connect_and_create_schemas()
 cur = db_connection.cursor()

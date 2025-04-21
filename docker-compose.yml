@@ -69,7 +69,7 @@ services:
       - ./common/streamlit:/app  # Mounts the local "streamlit" folder into the container
       - ./shared:/shared  
 
-    command: ["streamlit", "run", "main_Streamlit.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.runOnSave=true"]
+    command: ["streamlit", "run", "PostgreSQL_streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.runOnSave=true"]
 
 
  

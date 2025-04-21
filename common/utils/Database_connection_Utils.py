@@ -24,11 +24,16 @@ sys.path.append(common_PATH)
 
 
 
+import os
 
+current_path = os.getcwd()
+parent_directory = os.path.dirname(current_path)  # Get the parent directory)
+print(parent_directory)
+one_level_up = os.path.abspath(os.path.join(parent_directory,"credentials","config.ini"))
+print(one_level_up)
 # Load the config file
 config = configparser.ConfigParser()
-config.read("D:\docker_personal\project_IOT_LG\common\credentials\config.ini")
-
+config.read(r"C:\Users\Acer\PycharmProjects\IOT_Project\common\credentials\config.ini")
 
 import psycopg2
 import configparser
@@ -74,7 +79,7 @@ def connect_and_create_schemas():
             host="localhost",
             port=port
         )
-        conn.autocommit = True  # 👈 Add this
+        conn.autocommit = True
 
         cursor = conn.cursor()
         cursor.execute("SELECT 1")
@@ -99,7 +104,7 @@ def connect_and_create_schemas():
                """
         create_table(cursor,conn,"Registered_Devices","device_staging",create_query)
         create_query = f"""
-                           CREATE TABLE IF NOT EXISTS registered_devices.customer_staging (
+                           CREATE TABLE IF NOT EXISTS customers.customer_staging (
                                customer_id SERIAL PRIMARY KEY,
                                 full_name VARCHAR(100),
                                 email VARCHAR(100),
@@ -112,7 +117,7 @@ def connect_and_create_schemas():
                                 
                            );
                        """
-        create_table(cursor, conn, "Registered_Devices", "customer_staging", create_query)
+        create_table(cursor, conn, "customers", "customer_staging", create_query)
         conn.commit()  # Commit the schema creation
         print("Schema&tables creation complete.")
         return conn

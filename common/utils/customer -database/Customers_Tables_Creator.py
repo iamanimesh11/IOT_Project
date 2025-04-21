@@ -1,8 +1,6 @@
 import psycopg2
-import io
 import re
 import logging
-import json
 import time
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -13,9 +11,6 @@ from common.utils.Database_connection_Utils import connect_and_create_schemas
 DB_CONNECTION = connect_and_create_schemas()
 cur = DB_CONNECTION.cursor()
 PROCESSED_TABLES = set()
-
-# Function to check if a table exists for device type and model
-checked_tables = set()
 
 
 def check_table_exists(cur, schema, table_name):
@@ -45,6 +40,8 @@ def create_customer_table(cur, connection, schema, table_name):
             phone VARCHAR(50),
             address TEXT,
             device_id VARCHAR(255) REFERENCES registered_devices.{table_name}(device_id) UNIQUE,
+            device_type VARCHAR(50) NOT NULL,
+            model_name VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT now(),
             updated_at TIMESTAMP DEFAULT NOW(),
             is_active BOOLEAN DEFAULT TRUE  ,
@@ -65,11 +62,11 @@ def create_customer_table(cur, connection, schema, table_name):
 
 # store table names into different table
 def upsert_customer_data(cur, connection, schema, table_name, customer_data):
-    """Inserts or updates device data in the specific device table."""
+    """Inserts or updates device data in the specific CUSTOMER  table IN customers schema."""
     sql = f"""
-        INSERT INTO {schema}.{table_name} (customer_id, full_name, email, phone, address, updated_at, log_action,is_active)
-        VALUES (%s, %s, %s, %s, %s, NOW(), 'insert')
-        ON CONFLICT (customer_id)
+        INSERT INTO {schema}.{table_name} (full_name, email, phone, address, device_id,device_type,model_name,updated_at, log_action,is_active)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), 'insert',TRUE)
+        ON CONFLICT (device_id)
         DO UPDATE SET
             full_name = EXCLUDED.full_name,
             email = EXCLUDED.email,
@@ -87,44 +84,45 @@ def upsert_customer_data(cur, connection, schema, table_name, customer_data):
     """
     try:
         cur.execute(sql, (
+            customer_data['full_name'],
+            customer_data['email'],
+            customer_data['phone'],
+            customer_data['address'],
             customer_data['device_id'],
             customer_data['device_type'],
-            customer_data['model_name'],
-            customer_data['alias'],
-            customer_data['reportable']
+            customer_data['model_name']
+
         ))
-        connection.commit()
-        logging.info(f"🔄 UPSERTED device: {customer_data['device_id']} in {schema}.{table_name}")
+        logging.info(f"🔄 UPSERTED customer data : {customer_data['device_id']} in {schema}.{table_name}")
         return True
     except psycopg2.Error as e:
         connection.rollback()
-        logging.error(f"Error UPSERTING device {customer_data['device_id']} in {schema}.{table_name}: {e}")
+        logging.error(f"Error UPSERTING customer data {customer_data['device_id']} in {schema}.{table_name}: {e}")
         return False
 
 
-def mark_missing_devices(cur, connection, schema, table_name, device_type, model_name):
-    """Marks devices as missing if not present in the staging table."""
+def mark_missing_customers(cur, connection, schema, table_name, device_type, model_name):
+    """Marks customers  as missing if not present in the customer_staging table."""
     sql = f"""
         UPDATE {schema}.{table_name}
         SET log_action = 'missing', updated_at = NOW(), is_active = FALSE
         WHERE NOT EXISTS (
             SELECT 1
-            FROM customers.customer_staging
-            WHERE customer_staging.device_id = {schema}.{table_name}.device_id
-            AND customer_staging.device_type = %s
-            AND customer_staging.model_name = %s
-        ) AND log_action != 'missing';
+            FROM customers.customer_staging staging
+            WHERE staging.device_id = {schema}.{table_name}.device_id
+            AND staging.device_type = %s
+            AND staging.model_name = %s
+        ) 
     """
     try:
         cur.execute(sql, (device_type, model_name))
-        connection.commit()
         updated_count = cur.rowcount
         if updated_count > 0:
-            logging.warning(f"🚨 Marked {updated_count} devices as missing in {schema}.{table_name}")
+            logging.warning(f"🚨 Marked {updated_count} customers as missing in {schema}.{table_name}")
         return True
     except psycopg2.Error as e:
         connection.rollback()
-        logging.error(f"Error marking missing devices in {schema}.{table_name}: {e}")
+        logging.error(f"Error marking missing customers in {schema}.{table_name}: {e}")
         return False
 
 
@@ -133,81 +131,98 @@ if __name__ == "__main__":
 
     # 1. Fetch unique device type and model combinations from staging
     cur.execute("""
-        SELECT DISTINCT device_type, model_name
+        SELECT DISTINCT device_id,device_type, model_name
         FROM customers.customer_staging;
     """)
+
     unique_devices = cur.fetchall()
     logging.info(f"Found {len(unique_devices)} unique device type/model combinations in staging.")
-    for device_type, model_name in unique_devices:
-        print(f"{device_type}: {model_name}")
-    print(f"length of uniue devices: {len(unique_devices)}")
-    print("sleeping")
+    # for device_id,device_type, model_name in unique_devices:
+    #     print(f"{device_type}: {model_name}")
+    # print(f"length of unique devices: {len(unique_devices)}")
     # 2. Process each unique device type and model
-    for device_type, model_name in unique_devices:
+    current_staging_table_names = set()
+    for device_id,device_type, model_name in unique_devices:
         table_name = f"{device_type.lower().replace('device_', '')}_model_{model_name.lower()}"
         table_name = re.sub(r'\W+', '_', table_name).strip('_')
+        current_staging_table_names.add(table_name) # Track expected tables
 
         # 3. Create the table if it doesn't exist
         if not check_table_exists(cur, 'customers', table_name):
-            create_device_table(cur, DB_CONNECTION, 'customers', table_name)
+            # Pass DB_CONNECTION here
+            if not create_customer_table(cur, DB_CONNECTION, 'customers', table_name):
+                logging.error(f"Failed to create table {table_name}, skipping...")
+                continue  # Skip this type/model if table creation fails
 
         # 4. Fetch data for the current device type and model from staging
         cur.execute("""
-            SELECT device_id, device_type, model_name, alias, reportable
+            SELECT customer_id,full_name,email,phone,address,device_id, device_type, model_name
             FROM customers.customer_staging
             WHERE device_type = %s AND model_name = %s;
         """, (device_type, model_name))
-        devices_to_sync = cur.fetchall()
-
+        customers_to_sync = cur.fetchall()
+        logging.debug(f"Found {len(customers_to_sync)} customer records for {device_type}/{model_name} in staging.")
         # 5. UPSERT each device
-        for row in devices_to_sync:
+        upsert_success_count = 0
+        for row in customers_to_sync:
             customer_data = {
-                'device_id': row[0],
-                'device_type': row[1],
-                'model_name': row[2],
-                'alias': row[3],
-                'reportable': row[4]
+                'customer_id': row[0],
+                'full_name': row[1],
+                'email': row[2],
+                'phone': row[3],
+                'address': row[4],
+                'device_id': row[5],
+                'device_type': row[6],
+                'model_name': row[7]
+
             }
-            upsert_customer_data(cur, DB_CONNECTION, 'customers', table_name, customer_data)
-
+            # Call the UPSERT function
+            if upsert_customer_data(cur, DB_CONNECTION, 'customers', table_name, customer_data):
+                upsert_success_count += 1
+        DB_CONNECTION.commit()
+        logging.info(f"Committed UPSERTs for {upsert_success_count}/{len(customers_to_sync)} customers into customers.{table_name}")
         # 6. Mark missing customers for this table
-        mark_missing_devices(cur, DB_CONNECTION, 'customers', table_name, device_type, model_name)
-
+        mark_missing_customers(cur, DB_CONNECTION, 'customers', table_name, device_type, model_name)
+        DB_CONNECTION.commit()  # <-- ADD THIS LINE
     # 7. Handle tables for device types/models no longer in staging
+    logging.info("Checking for customer tables with no corresponding staging data...")
     cur.execute("""
         SELECT table_name
         FROM information_schema.tables
         WHERE table_schema = 'customers'
         AND table_name LIKE '%_model_%';
     """)
-    existing_device_tables = [row[0] for row in cur.fetchall()]
+    existing_customer_tables = [row[0] for row in cur.fetchall()]
 
-    cur.execute("""
-        SELECT DISTINCT LOWER(REPLACE(REPLACE(device_type, 'device_', ''), ' ', '_')) || '_model_' || LOWER(REPLACE(model_name, ' ', '_'))
-        FROM customers.customer_staging;
-    """)
-    current_device_table_names = set(row[0] for row in cur.fetchall())
+    # cur.execute("""
+    #     SELECT DISTINCT LOWER(REPLACE(REPLACE(device_type, 'device_', ''), ' ', '_')) || '_model_' || LOWER(REPLACE(model_name, ' ', '_'))
+    #     FROM customers.customer_staging;
+    # """)
+    # current_device_table_names = set(row[0] for row in cur.fetchall())
+    tables_to_mark_fully_missing = existing_customer_tables - current_staging_table_names
+    logging.info(f"Customer tables potentially containing only missing customers: {tables_to_mark_fully_missing}") # Added logging
+    for table in tables_to_mark_fully_missing:
+        # This logic is simpler and better than trying to parse the name
+        logging.warning(f"Marking all active customers in customers.{table} as missing (type/model no longer in staging).")
+        sql_mark_all = f"""
+                 UPDATE customers.{table}
+                 SET log_action = 'missing_type_model', updated_at = NOW(), is_active = FALSE
+                 WHERE is_active = TRUE; -- Use is_active condition
+             """
+        try:
+            cur.execute(sql_mark_all)
+            # GOOD: Commit after updating this table.
+            DB_CONNECTION.commit()
+        except psycopg2.Error as e:
+            DB_CONNECTION.rollback()
+            logging.error(f"Error marking all missing in customers.{table}: {e}")
 
-    for table in existing_device_tables:
-        if table not in current_device_table_names:
-            # Extract device_type and model_name (best effort based on naming convention)
-            match = re.match(r"(.+)_model_(.+)", table)
-            if match:
-                device_type_part = match.group(1).replace('_', ' ').lower()
-                model_name_part = match.group(2).replace('_', ' ').lower()
-                mark_missing_devices(cur, DB_CONNECTION, 'customers', table, device_type_part, model_name_part)
-            else:
-                logging.warning(f"Could not reliably extract device info from table name: {table} for marking missing devices.")
-
-    logging.info("✅ All devices processed successfully!")
-
+    logging.info("✅ Customer table processing complete!") # Updated log message
     # Cleanup (optional)
     # cur.execute("TRUNCATE TABLE customers.customer_staging;")
     # DB_CONNECTION.commit()
     # logging.info("🧹 Cleaned up staging table")
-
     cur.close()
     DB_CONNECTION.close()
-
     end_time = time.time()
     logging.info(f"Total time taken: {end_time - start_time} seconds")

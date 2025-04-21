@@ -106,6 +106,8 @@ def connect_and_create_schemas():
                                 phone VARCHAR(50),
                                 address TEXT,
                                 device_id VARCHAR(255) REFERENCES registered_devices.device_staging(device_id) UNIQUE,
+                                device_type VARCHAR(50) NOT NULL,
+                                model_name VARCHAR(255) NOT NULL,
                                 created_at TIMESTAMP DEFAULT now()
                                 
                            );

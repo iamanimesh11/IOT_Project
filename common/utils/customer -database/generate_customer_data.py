@@ -45,7 +45,7 @@ while True:
     # Step 1: Fetch a chunk of existing device IDs
     cur.execute("""
         SELECT device_id
-        FROM customer_staging.device_Staging
+        FROM registered_devices.device_Staging
         ORDER BY device_id  
         LIMIT %s
         OFFSET %s

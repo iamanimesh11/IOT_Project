@@ -1,5 +1,4 @@
 import requests
-import json
 import math
 import logging,time
 from staging_table_creation import checked_staging_table, create_staging_table, dump_device_data_to_staging

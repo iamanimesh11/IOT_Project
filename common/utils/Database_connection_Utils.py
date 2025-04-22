@@ -91,6 +91,7 @@ def connect_and_create_schemas():
         create_schema(cursor, conn, database_name, "Registered_Devices")
         create_schema(cursor, conn, database_name, "subscribed_devices")
         create_schema(cursor, conn, database_name, "customers")
+        create_schema(cursor, conn, database_name, "Subscriptions")
 
         create_query = f"""
                    CREATE TABLE IF NOT EXISTS registered_devices.device_staging (
@@ -118,6 +119,17 @@ def connect_and_create_schemas():
                            );
                        """
         create_table(cursor, conn, "customers", "customer_staging", create_query)
+        create_query = f"""
+                                 CREATE TABLE registered_devices.subscribed_devices (
+                                    id SERIAL PRIMARY KEY,
+                                    device_id VARCHAR(255) NOT NULL,
+                                    subscribed_at TIMESTAMP DEFAULT NOW(),
+                                    expires_at TIMESTAMP NOT NULL,
+                                    subscription_status VARCHAR(20) DEFAULT 'active' -- or 'expired', 'failed'
+                                  );
+                              """
+        create_table(cursor, conn, "Subscriptions", "subscribed_devices", create_query)
+
         conn.commit()  # Commit the schema creation
         print("Schema&tables creation complete.")
         return conn

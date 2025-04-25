@@ -9,7 +9,7 @@ import jwt
 from flask import Flask, request, jsonify
 import psycopg2,configparser
 
-# --- Load Config ---
+# --- Load Confiiig  ---
 CONFIG_PATH = r"C:\Users\Acer\PycharmProjects\IOT_Project\common\credentials\config.ini"
 config = configparser.ConfigParser()
 if not os.path.exists(CONFIG_PATH):

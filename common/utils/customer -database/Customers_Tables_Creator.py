@@ -125,24 +125,32 @@ def mark_missing_customers(cur, connection, schema, table_name, device_type, mod
         logging.error(f"Error marking missing customers in {schema}.{table_name}: {e}")
         return False
 
-
+def read_from_json_file():
+    input_file = "device_models.json"
+    try:
+        with open(input_file, 'r') as f:
+            loaded_data = json.load(f)
+            return loaded_data
+            
+    except FileNotFoundError:
+        print(f"Error: '{input_file}' not found.")
+    except json.JSONDecodeError:
+        print(f"Error: Could not decode JSON from '{input_file}'.")
+    except IOError as e:
+        print(f"Error reading from '{input_file}': {e}")
+        
+        
 if __name__ == "__main__":
     start_time = time.time()
 
     # 1. Fetch unique device type and model combinations from staging
-    cur.execute("""
-        SELECT DISTINCT device_id,device_type, model_name
-        FROM customers.customer_staging;
-    """)
-
-    unique_devices = cur.fetchall()
+    unique_devices=read_from_json_file()
+    
     logging.info(f"Found {len(unique_devices)} unique device type/model combinations in staging.")
-    # for device_id,device_type, model_name in unique_devices:
-    #     print(f"{device_type}: {model_name}")
-    # print(f"length of unique devices: {len(unique_devices)}")
+    
     # 2. Process each unique device type and model
     current_staging_table_names = set()
-    for device_id,device_type, model_name in unique_devices:
+    for device_id,device_type, model_name in unique_devices.items():
         table_name = f"{device_type.lower().replace('device_', '')}_model_{model_name.lower()}"
         table_name = re.sub(r'\W+', '_', table_name).strip('_')
         current_staging_table_names.add(table_name) # Track expected tables

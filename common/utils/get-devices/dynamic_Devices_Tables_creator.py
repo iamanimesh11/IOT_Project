@@ -120,6 +120,16 @@ def mark_missing_devices(CURSOR, connection, schema, table_name, device_type, mo
         logging.error(f"Error marking missing devices in {schema}.{table_name}: {e}")
         return False
 
+def Output_devices_to_json_file(device_model_dict):
+    output_file = "device_models.json"
+    try:
+        with open(output_file, 'w') as f:
+            json.dump(device_model_dict, f, indent=4)  # Use indent for pretty formatting
+        logging.info(f"Device type and model names written to '{output_file}'")
+    except IOError as e:
+        logging.error(f"Error writing to '{output_file}': {e}")
+
+
 
 if __name__ == "__main__":
     start_time = time.time()
@@ -130,6 +140,10 @@ if __name__ == "__main__":
                    FROM registered_devices.device_staging;
                    """)
     unique_type_models = CURSOR.fetchall()
+    device_model_dict = {device_type: model for device_type, model in unique_type_models}
+
+    Output_devices_to_json_file(device_model_dict)
+
     logging.info(f"Found {len(unique_type_models)} unique device type/model combinations in staging.")
     current_staging_table_names = set()
     # 2. Process each unique device type and model

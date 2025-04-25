@@ -88,10 +88,9 @@ def connect_and_create_schemas():
             print("Warning: Test query failed.")
         print("Successfully connected to PostgreSQL database.")
 
-        create_schema(cursor, conn, database_name, "Registered_Devices")
-        create_schema(cursor, conn, database_name, "subscribed_devices")
+        create_schema(cursor, conn, database_name, "registered_devices")
         create_schema(cursor, conn, database_name, "customers")
-        create_schema(cursor, conn, database_name, "Subscriptions")
+        create_schema(cursor, conn, database_name, "subscriptions")
 
         create_query = f"""
                    CREATE TABLE IF NOT EXISTS registered_devices.device_staging (
@@ -103,7 +102,7 @@ def connect_and_create_schemas():
                        created_at TIMESTAMP DEFAULT now()
                    );
                """
-        create_table(cursor,conn,"Registered_Devices","device_staging",create_query)
+        create_table(cursor,conn,"registered_devices","device_staging",create_query)
         create_query = f"""
                            CREATE TABLE IF NOT EXISTS customers.customer_staging (
                                customer_id SERIAL PRIMARY KEY,
@@ -120,7 +119,7 @@ def connect_and_create_schemas():
                        """
         create_table(cursor, conn, "customers", "customer_staging", create_query)
         create_query = f"""
-                                 CREATE TABLE registered_devices.subscribed_devices (
+                                 CREATE TABLE subscriptions.subscribed_devices (
                                     id SERIAL PRIMARY KEY,
                                     device_id VARCHAR(255) NOT NULL,
                                     subscribed_at TIMESTAMP DEFAULT NOW(),
@@ -128,7 +127,32 @@ def connect_and_create_schemas():
                                     subscription_status VARCHAR(20) DEFAULT 'active' -- or 'expired', 'failed'
                                   );
                               """
-        create_table(cursor, conn, "Subscriptions", "subscribed_devices", create_query)
+        create_table(cursor, conn, "subscriptions", "subscribed_devices", create_query)
+        create_query = f"""
+                              CREATE TABLE registered_devices.auth_tokens (
+                                    token TEXT PRIMARY KEY,
+                                    device_id TEXT NOT NULL,
+                                    issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                    expires_at TIMESTAMP NOT NULL,
+                                    is_active BOOLEAN DEFAULT TRUE
+                              );
+
+                    """
+        create_table(cursor, conn, "registered_devices", "auth_tokens", create_query)
+        create_query = f"""
+                                    CREATE TABLE subscriptions.services (
+                                        service_id UUID PRIMARY KEY ,
+                                        service_name VARCHAR(100) NOT NULL UNIQUE,
+                                        service_key TEXT NOT NULL,
+                                        callback_url TEXT NOT NULL,
+                                        status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'paused', 'disabled')),
+                                        registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                    );
+                               """
+        create_table(cursor, conn, "subscriptions", "services", create_query)
+        # CREATE INDEX idx_subscriptions_expiry ON subscriptions(expires_at);
+        # CREATE INDEX idx_subscriptions_service_device ON subscriptions (service_id, device_id);
+
 
         conn.commit()  # Commit the schema creation
         print("Schema&tables creation complete.")

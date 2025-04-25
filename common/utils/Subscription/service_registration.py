@@ -7,8 +7,7 @@ import redis
 import uuid
 import jwt
 from flask import Flask, request, jsonify
-from kafka import KafkaProducer
-import psycopg2
+import psycopg2,configparser
 
 # --- Load Config ---
 CONFIG_PATH = r"C:\Users\Acer\PycharmProjects\IOT_Project\common\credentials\config.ini"
@@ -21,6 +20,11 @@ config.read(CONFIG_PATH)
 # --- Logging ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+from Database_connection_Utils import connect_to_db
+conn = connect_to_db()
+
+
+
 
 # --- Redis ---
 
@@ -32,13 +36,7 @@ SECRET_KEY = 'your-secret-key'
 
 
 # --- PostgreSQL Connection ---
-def get_db_connection():
-    return psycopg2.connect(
-        host=config.get("postgres", "host"),
-        database=config.get("postgres", "database"),
-        user=config.get("postgres", "user"),
-        password=config.get("postgres", "password")
-    )
+
     
 def generate_service_id():
     """Generate a unique service_id."""
@@ -75,7 +73,6 @@ def register():
         return jsonify({"error": "Missing service_name"}), 400
 
     try:
-        conn = get_db_connection()
         cur = conn.cursor()
 
         # Check if the service already exists
@@ -86,23 +83,23 @@ def register():
             return jsonify({"message": "Service already registered", "service_id": existing[0]}), 200
 
        
-    service_id = generate_service_id()
-    service_key = generate_service_key(service_id)
+        service_id = generate_service_id()
+        service_key = generate_service_key(service_id)
 
-    # Store in database
-    cursor.execute("""
-            INSERT INTO subscriptions.services (service_id, service_name, service_key, callback_url)
-            VALUES (%s, %s, %s, %s)
-        """, (service_id, service_name, service_key, callback_url))
-    conn.commit()
+        # Store in database
+        cursor.execute("""
+                INSERT INTO subscriptions.services (service_id, service_name, service_key, callback_url)
+                VALUES (%s, %s, %s, %s)
+            """, (service_id, service_name, service_key, callback_url))
+        conn.commit()
 
-    logging.info(f"Service registered with service_id: {service_id}")
-    
-    return jsonify({
-            "message": "Registration successful",
-            "service_id": service_id,
-            "service_key": service_key
-        }), 201
+        logging.info(f"Service registered with service_id: {service_id}")
+        
+        return jsonify({
+                "message": "Registration successful",
+                "service_id": service_id,
+                "service_key": service_key
+            }), 201
         
     except Exception as e:
         logging.error(f"Registration failed: {e}")

@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import SQLAlchemyError
-import subprocess
 import plotly.express as px
 
 # Database connection details

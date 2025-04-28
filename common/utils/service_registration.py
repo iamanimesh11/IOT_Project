@@ -5,25 +5,16 @@ import datetime
 import json
 import redis
 import uuid
-import jwt
-from flask import Flask, request, jsonify
+import jwt as pyjwt
+from flask import Flask, request, jsonify,current_app
+
 import psycopg2,configparser
-
-# --- Load Confiiig  ---
-CONFIG_PATH = r"C:\Users\Acer\PycharmProjects\IOT_Project\common\credentials\config.ini"
-config = configparser.ConfigParser()
-if not os.path.exists(CONFIG_PATH):
-    logging.error(f"Config file not found at: {CONFIG_PATH}")
-    sys.exit(1)
-config.read(CONFIG_PATH)
-
-# --- Logging ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
+
+
 from Database_connection_Utils import connect_to_db
-conn = connect_to_db()
-
-
 
 
 # --- Redis ---
@@ -33,10 +24,14 @@ app = Flask(__name__)
 
 # Secret key for JWT token generation (ensure it's kept secret and secure)
 SECRET_KEY = 'your-secret-key'
+#app.extensions['redis'] = redis_client #store the raw client.  FlaskRedis does this.
 
 
-# --- PostgreSQL Connection ---
-
+def get_redis():
+    """Gets the redis client from the current app."""
+    if 'redis' not in current_app.extensions:
+        raise RuntimeError("Redis is not initialized. Did you forget to call init_app(app)?")
+    return current_app.extensions['redis']
     
 def generate_service_id():
     """Generate a unique service_id."""
@@ -44,19 +39,28 @@ def generate_service_id():
 
 def generate_service_key(service_id):
     """Generate a service_key (JWT token) for the service."""
+    utc_now = datetime.datetime.now(datetime.timezone.utc)
     payload = {
         'service_id': service_id,
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)  # Token expires in 24 hours
+        'exp': utc_now + datetime.timedelta(hours=24)  # Token expires in 24 hours
     }
-    service_key = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    try:
+        service_key = pyjwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    except Exception as e:
+        logging.error(f"Error encoding JWT: {e}")
+        return None # IMPORTANT:  Handle the error!
+
     # Store the service_key in Redis for quick validation (with TTL of 24 hours)
-    r.set(service_id, service_key, ex=86400)  # 86400 seconds = 24 hours
+    redis_client.set(service_id, service_key, ex=86400)  # 86400 seconds = 24 hours
     return service_key
 
 def verify_service_key(service_key):
-    """Verify the service_key from the Authorization header."""
     try:
-        payload = jwt.decode(service_key, SECRET_KEY, algorithms=['HS256'])
+        payload = pyjwt.decode(service_key, SECRET_KEY, algorithms=['HS256'])
+        service_id = payload['service_id']
+        stored_token = redis_client.connection.get(f"service:{service_id}")
+        if stored_token is None or stored_token.decode() != service_key:
+            return None
         return payload
     except jwt.ExpiredSignatureError:
         return None
@@ -68,11 +72,16 @@ def register():
     # Generate a unique service_id
     data = request.get_json()
     service_name = data.get("service_name")
+    callback_url = data.get("callback_url")  # Get callback URL
 
     if not service_name:
         return jsonify({"error": "Missing service_name"}), 400
+    if not callback_url:
+        return jsonify({"error": "Missing callback_url"}), 400 #add this
+    conn = None # Initialize conn
 
     try:
+        conn = connect_to_db()
         cur = conn.cursor()
 
         # Check if the service already exists
@@ -87,7 +96,7 @@ def register():
         service_key = generate_service_key(service_id)
 
         # Store in database
-        cursor.execute("""
+        cur.execute("""
                 INSERT INTO subscriptions.services (service_id, service_name, service_key, callback_url)
                 VALUES (%s, %s, %s, %s)
             """, (service_id, service_name, service_key, callback_url))

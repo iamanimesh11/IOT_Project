@@ -4,36 +4,34 @@ import psycopg2
 import configparser
 import logging
 
+current_directory = os.getcwd()
+
+
 # Determine the correct base directory dynamically
+os.environ['AIRFLOW_HOME'] = os.path.join(current_directory, "pipelines", "airflow")
+
 AIRFLOW_HOME = os.getenv("AIRFLOW_HOME", "/opt/airflow")  # Default to Airflow's path
 if AIRFLOW_HOME != "/opt/airflow":
-    BASE_DIR = os.path.abspath(os.path.join(AIRFLOW_HOME, ".."))  # Go one level up from /opt/airflow
+    BASE_DIR = os.path.abspath(os.path.join(AIRFLOW_HOME, "..",".."))  # Go one level up from /opt/airflow
     print("BASE_DIR:", BASE_DIR)  # ✅ Debugging: Print to verify inside container
     AIRFLOW_HOME = BASE_DIR
     logging.info("below base_Dir")
     logging.info(BASE_DIR)
-    
+
+
 COMMON_PATH = os.path.join(AIRFLOW_HOME, "common", "logging_and_monitoring")
 sys.path.append(COMMON_PATH)
 
 common_PATH = os.path.join(AIRFLOW_HOME, "common","logging_and_monitoring","logs") 
 sys.path.append(common_PATH)
 
-
+config_path=os.path.join(AIRFLOW_HOME, "common", "credentials","config.ini")
+print(f"config path is :{config_path}")
 # from centralized_logging import setup_logger
 
-
-
-import os
-
-current_path = os.getcwd()
-parent_directory = os.path.dirname(current_path)  # Get the parent directory)
-print(parent_directory)
-one_level_up = os.path.abspath(os.path.join(parent_directory,"credentials","config.ini"))
-print(one_level_up)
 # Load the config file
 config = configparser.ConfigParser()
-config.read(r"C:\Users\Acer\PycharmProjects\IOT_Project\common\credentials\config.ini")
+config.read(config_path)
 
 import psycopg2
 import configparser
@@ -45,6 +43,32 @@ username = db_config['user']
 password = db_config['password']
 port = db_config['port']
 database_name = db_config['database']
+
+
+def connect_to_db():
+    """Connects to the PostgreSQL database and returns the connection object."""
+    conn = None
+    try:
+        conn = psycopg2.connect(
+            dbname=database_name,
+            user=username,
+            password=password,
+            host="localhost",
+            port=port
+        )
+        conn.autocommit = True
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1")
+        result = cursor.fetchone()
+        if result[0] != 1:
+            print("Warning: Test query failed.")
+        print("Successfully connected to PostgreSQL database.")
+        return conn
+    except psycopg2.Error as e:
+        print(f"Database connection failed: {e}")
+        if conn:
+            conn.close()
+        return None
 
 
 def create_schema(cursor, conn, dbname, schema_name):

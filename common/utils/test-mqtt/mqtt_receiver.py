@@ -10,7 +10,7 @@ def on_connect(client, userdata, flags, rc):
     print("✅ Connected with result code " + str(rc))
     client.subscribe(MQTT_TOPIC)
     print(f"🔍 Subscribed to topic '{MQTT_TOPIC}'")
-
+    
 # Called when a message is received
 def on_message(client, userdata, msg):
     try:

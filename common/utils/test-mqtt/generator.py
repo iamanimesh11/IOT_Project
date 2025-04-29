@@ -9,11 +9,12 @@ import paho.mqtt.client as mqtt
 MQTT_BROKER = "localhost"
 MQTT_PORT = 1883
 
-with open("devices.json") as f:
+
+with open(r"E:\IOT_Project\common\utils\test-mqtt\device_models.json") as f:
     devices=json.load(f)
 
-with open("error_codes.json") as f:
-    error_codes = json.load(f)
+with open(r"E:\IOT_Project\common\utils\test-mqtt\device_profiles.json") as f:
+    profiles = json.load(f)
 
 # Simulated device models and behaviors
 
@@ -21,13 +22,12 @@ with open("error_codes.json") as f:
 # Function to generate telemetry
 def generate_telemetry(device):
     device_type = device["device_type"]
-    status_options = ["idle", "running", "paused"]
-    error_chance = random.random()
-    error =None
-    
-    
-    if error_chance < 0.1 and device_type in error_codes:
-        error = random.choice(error_codes[device_type])
+    profile = profiles.get(device_type, {})
+
+    status_options = profile.get("status", ["unknown"])
+    error_options = profile.get("errors", [])
+    error = random.choice(error_options) if random.random() < 0.1 else None
+
 
     payload = {
         "device_id": device["device_id"],
@@ -35,7 +35,7 @@ def generate_telemetry(device):
         "device_name": device["device_name"],
         "status": random.choice(status_options),
         "error_code": error,
-        "timestamp": time.time()
+        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     }
 
     return payload
@@ -49,7 +49,7 @@ print("🚀 Starting device simulation...")
 while True:
     device=random.choice(devices)
     topic=f"iot/telemetry/{device['device_type']}/{device['device_id']}"
-    payload=json.dump(generate_telemetry(device))
+    payload=json.dumps(generate_telemetry(device))
     client.publish(topic, payload)
 
     print(f"📡 Published to [{topic}]: {payload}")

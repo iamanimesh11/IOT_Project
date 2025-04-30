@@ -1,6 +1,41 @@
 [
-    { "device_type": "refrigerator", "device_name": "Whirlpool_Ref", "device_id": "ref_101" },
-    { "device_type": "tv", "device_name": "Sony_Bravia", "device_id": "tv_001" },
-    { "device_type": "ac", "device_name": "LG_Cooler", "device_id": "ac_002" }
+    {
+      "device_type": "refrigerator",
+      "models": [
+        {
+          "model_name": "model_a",
+          "device_ids": ["ref_101", "ref_102"]
+        },
+        {
+          "model_name": "model_b",
+          "device_ids": ["ref_201"]
+        }
+      ]
+    },
+    {
+      "device_type": "tv",
+      "models": [
+        {
+          "model_name": "series_x",
+          "device_ids": ["tv_001", "tv_002", "tv_003"]
+        },
+        {
+          "model_name": "series_y",
+          "device_ids": ["tv_010"]
+        }
+      ]
+    },
+    {
+      "device_type": "ac",
+      "models": [
+        {
+          "model_name": "split_1.5",
+          "device_ids": ["ac_002", "ac_005"]
+        },
+        {
+          "model_name": "window_1.0",
+          "device_ids": ["ac_110"]
+        }
+      ]
+    }
   ]
-  

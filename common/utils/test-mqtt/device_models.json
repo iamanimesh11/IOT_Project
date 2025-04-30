@@ -1,6 +1,5 @@
 [
-    { "device_type": "refrigerator", "device_name": "Whirlpool_Ref", "device_id": "ref_101" },
-    { "device_type": "tv", "device_name": "Sony_Bravia", "device_id": "tv_001" },
-    { "device_type": "ac", "device_name": "LG_Cooler", "device_id": "ac_002" }
-  ]
-  
+  { "device_type": "refrigerator", "device_name": "Whirlpool_Ref", "device_id": "ref_101" },
+  { "device_type": "tv", "device_name": "Sony_Bravia", "device_id": "tv_001" },
+  { "device_type": "ac", "device_name": "LG_Cooler", "device_id": "ac_002" }
+]

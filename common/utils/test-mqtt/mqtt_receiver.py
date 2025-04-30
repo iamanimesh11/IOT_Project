@@ -1,9 +1,15 @@
 import paho.mqtt.client as mqtt
 import json
+import os
+
+device_type=os.environ.get("DEVICE_TYPE")
+if not device_type:
+    raise ValueError("device type not prodvided in enviornemnet variable")
+
 
 MQTT_BROKER = "localhost"
 MQTT_PORT = 1883
-MQTT_TOPIC = "iot/#"  # Subscribe to all device topics
+MQTT_TOPIC = "iot/telemetry/{device_type}}#"  # Subscribe to all device topics
 
 # Called when client connects to broker
 def on_connect(client, userdata, flags, rc):

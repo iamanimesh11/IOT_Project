@@ -14,6 +14,23 @@ def prefix_sum_subarrays(nums,k):
 
 
 
-nums=[1,2,1,2,1]
-k=3
-print(prefix_sum_subarrays(nums,3))
+# nums=[1,2,1,2,1]
+# k=3
+# print(prefix_sum_subarrays(nums,3))
+
+def get_equal_target_indices(arr,target):
+    """ """
+    complement=0
+    map={}
+    for i in range(len(arr)):
+        complement=target-arr[i]
+        if complement  not in map:
+            map[arr[i]]=i
+        else:
+            
+            
+    
+
+arr=[2,7,11,15]
+target =9
+print(get_equal_target_indices(arr,target))

@@ -25,29 +25,7 @@ services:
       - ./config/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
       - ./config:/app/config # Mount the config directory containing db_initialize.sh
 
-  db_initialization:
-        image: postgres:alpine
-        container_name: db_initialization
-        networks:
-          - my_custom_network
-        dns:
-          - 8.8.8.8
-          - 8.8.4.4
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: animesh11
-          POSTGRES_HOST: postgres # Use the service name as hostname
-        depends_on:
-          - postgres
-        volumes:
-          - ./config:/shared:ro # Mount your script directory as read-only
-        entrypoint: ["/bin/sh", "-c", "ls -l /shared && sleep 5 && /shared/db_initialize.sh"]
-        restart: "no" # Run once and exit after initialization
-
-
-
-  
-  
+ 
   streamlit:
     build: ./common/streamlit
     container_name: streamlit2
@@ -80,6 +58,8 @@ services:
         - ./mosquitto/config:/mosquitto/config
         - ./mosquitto/data:/mosquitto/data
         - ./mosquitto/log:/mosquitto/log
+ 
+ 
   redis:
     image: redis:latest
     container_name: redis-server
@@ -101,11 +81,6 @@ networks:
     
     
 volumes:
-  loki_data:
-  grafana_data:
   postgres_data:  
-  airflow-logs:
-  airflow-dags:
-  zookeeper_data:
   kafka_data:
   redis_data:

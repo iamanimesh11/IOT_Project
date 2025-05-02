@@ -1,7 +1,7 @@
 import random
 import time
 import uuid
-import json
+import json,os
 from datetime import datetime
 import paho.mqtt.client as mqtt
 
@@ -9,8 +9,16 @@ import paho.mqtt.client as mqtt
 MQTT_BROKER = "localhost"
 MQTT_PORT = 1883
 
+def get_root_Directory_path(n):
+    path=os.path.abspath(__file__)
+    for _ in range(n+1):
+        path=os.path.dirname(path)
+    return path
+root_dir_path=get_root_Directory_path(3)
+device_json_path= os.path.join(root_dir_path, "common", "utils","test-mqtt","device_models.json")
+device_profiles_path=os.path.join(root_dir_path, "common", "utils","test-mqtt","device_profiles.json")
 
-with open(r"E:\IOT_Project\common\utils\test-mqtt\device_models.json") as f:
+with open(device_json_path) as f:
     device_data = json.load(f)
 
 # Create a flat list of all devices, adding the device_type to each device object

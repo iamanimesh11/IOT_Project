@@ -8,6 +8,7 @@ from kafka.errors import KafkaError
 # --- Basic Logging Setup ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 # --- Configuration from Environment Variables ---
 DEVICE_TYPE = os.environ.get("DEVICE_TYPE")
 if not DEVICE_TYPE:

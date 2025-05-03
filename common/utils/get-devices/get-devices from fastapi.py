@@ -1,6 +1,10 @@
 import requests
 import math
-import logging,time
+import logging,time,os,sys
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, project_root)
+
 from staging_table_creation import checked_staging_table, create_staging_table, dump_device_data_to_staging
 from common.utils.Database_connection_Utils import connect_and_create_schemas
 

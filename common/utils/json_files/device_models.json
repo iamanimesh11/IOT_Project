@@ -70,29 +70,24 @@
     {
       "model_name": "LG_Cooler", "device_id": "ac_002_2"
     },
-    // ... (ac_002_3 to ac_002_9) ...
     {
       "model_name": "LG_Cooler", "device_id": "ac_002_10"
     },
-    // Samsung_Chill (ac_003) x 10
     {
       "model_name": "Samsung_Chill", "device_id": "ac_003_1"
     },
     {
       "model_name": "Samsung_Chill", "device_id": "ac_003_2"
     },
-    // ... (ac_003_3 to ac_003_9) ...
     {
       "model_name": "Samsung_Chill", "device_id": "ac_003_10"
     },
-    // Daikin_Frost (ac_004) x 10
     {
       "model_name": "Daikin_Frost", "device_id": "ac_004_1"
     },
     {
       "model_name": "Daikin_Frost", "device_id": "ac_004_2"
     },
-    // ... (ac_004_3 to ac_004_9) ...
     {
       "model_name": "Daikin_Frost", "device_id": "ac_004_10"
     }

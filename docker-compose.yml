@@ -24,11 +24,10 @@ services:
       - ./shared:/shared
       - ./config/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
       - ./config:/app/config # Mount the config directory containing db_initialize.sh
-
  
   streamlit:
     build: ./common/streamlit
-    container_name: streamlit2
+    container_name: streamlit
     networks:
       - my_custom_network
     dns:
@@ -37,7 +36,6 @@ services:
     ports:
       - "8501:8501"
       - "2375:2375"  # Expose Docker port
-
  
     environment:
       - KAFKA_BROKER=kafka:9092
@@ -47,19 +45,27 @@ services:
       - ./common/streamlit:/app  # Mounts the local "streamlit" folder into the container
       - ./shared:/shared  
 
-    command: ["streamlit", "run", "PostgreSQL_streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.runOnSave=true"]
+    command: ["streamlit", "run", "main_Streamlit.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.runOnSave=true"]
 
   mosquitto:
       image: eclipse-mosquitto:2
       ports:
         - "1883:1883"    # MQTT
         - "9001:9001"    # WebSocket (optional)
+      networks:
+        - my_custom_network
+      dns:
+        - 8.8.8.8
+        - 8.8.4.4
       volumes:
         - ./mosquitto/config:/mosquitto/config
         - ./mosquitto/data:/mosquitto/data
         - ./mosquitto/log:/mosquitto/log
- 
- 
+      healthcheck: # ✅ Ensure Mosquitto is ready before dependent services try to connect
+        test: ["CMD-SHELL", "nc -z localhost 1883 || exit 1"] # Simple check if port 1883 is open
+        interval: 5s
+        timeout: 3s
+        retries: 5
   redis:
     image: redis:latest
     container_name: redis-server
@@ -75,6 +81,98 @@ services:
       interval: 5s
       retries: 5
       timeout: 3s
+
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    restart: always
+    networks:
+      - my_custom_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper
+      - ./shared:/shared
+    healthcheck:
+          test: ["CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok"]
+          interval: 5s
+          timeout: 3s
+          retries: 3
+          start_period: 10s
+      
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    restart: always
+    depends_on:
+      - zookeeper
+    networks:
+      - my_custom_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    ports:
+       - "9092:9092"
+    environment:
+        KAFKA_BROKER_ID: 1
+        KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+        KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+        KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+        KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+        KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+   
+    volumes:
+        - kafka_data:/var/lib/kafka
+
+  mqtt_generator:
+    container_name: mqtt_device_Data_generator
+    build:
+          context: ./common/utils  # Set the build context one level up
+          dockerfile: ./test-mqtt/dockerfile # Specify the Dockerfile location relative to the context
+    networks:
+      - my_custom_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    depends_on:
+      - mosquitto  # Ensure mosquitto is started first
+
+  mqtt_consumer_container_creator:
+    container_name: mqtt_consumer_container_creator
+    build:
+          context: ./common/utils  # Set the build context one level up
+          dockerfile: ./test-mqtt/dockerfile_consumer_and_controller # Specify the Dockerfile location relative to the context
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Give access to host Docker
+    networks:
+      - my_custom_network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    depends_on:
+      - mosquitto  # Ensure mosquitto is started first
+
+  kafka_consumer_container_creator:
+    build:
+      context: ./common/utils # Build from the project root
+      dockerfile: ./kafka_handler/Dockerfile.kafka_controller # Use the new controller Dockerfile
+    container_name: kafka_consumer_container_creator
+    depends_on:
+      - kafka # Ensure Kafka broker is up before trying to launch consumers
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Mount docker socket
+    networks:
+      - my_custom_network
+    restart: on-failure # Restart if the controller script fails
+
+
 networks:
   my_custom_network:
     driver: bridge  # Or other network driver as needed
@@ -84,3 +182,4 @@ volumes:
   postgres_data:  
   kafka_data:
   redis_data:
+  zookeeper_data:

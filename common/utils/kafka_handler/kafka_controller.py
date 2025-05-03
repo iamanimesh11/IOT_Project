@@ -1,8 +1,8 @@
 import json,os
-# import subprocess # No longer needed
-import sys,logging # For exiting on error
+import sys,logging
 import docker # Import the Docker SDK
 from docker.errors import APIError, NotFound # Import specific Docker errors
+
 # --- Basic Logging Setup ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -18,24 +18,17 @@ if Directory != "inside_docker":
     root_dir_path=get_root_Directory_path(3)
     logging.info(f"Detected environment outside Docker (AIRFLOW_HOME='{Directory}'). Calculating root path.")
     device_json_path= os.path.join(root_dir_path, "common", "utils","json_files","device_models.json")
-    device_profile_path= os.path.join(root_dir_path, "common", "utils","json_files","devices_profiles.json")
-    MQTT_BROKER_HOST = "localhost"
     KAFKA_BROKERS_HOST = "localhost:9092" # For local runs outside compose
-    MQTT_PORT = 1883
 else:
     logging.info("Detected environment inside Docker or AIRFLOW_HOME not set. Using relative path.")
     device_json_path= os.path.join("json_files","device_models.json") # Corrected path for Docker context
-    device_profile_path= os.path.join("json_files","device_profiles.json")
-    MQTT_BROKER_HOST = "mosquitto"
     KAFKA_BROKERS_HOST = "kafka:9092" # Use the service name 'kafka' from docker-compose
-    MQTT_PORT = 1883
 
 logging.info(f"Using device models path: {device_json_path}")
-logging.info(f"Using device profiles path: {device_profile_path}")
-logging.info(f"Attempting to connect to MQTT Broker: {MQTT_BROKER_HOST}:{MQTT_PORT}")
+logging.info(f"Kafka brokers for consumer containers: {KAFKA_BROKERS_HOST}")
 
-# --- Configuratiomqtt_consumern ---
-IMAGE_NAME = "iot_project-mqtt_consumer_container_creator" # Build this image first: docker build -t mqtt_consumer_image ./common/utils/test-mqtt
+# --- Configuration ---
+KAFKA_CONSUMER_IMAGE_NAME = "iot_project-kafka_consumer_container_creator" # Name of the image built by Dockerfile.kafka_consumer
 DOCKER_NETWORK = "iot_project_my_custom_network" # Default network name format: <project_directory>_<network_name>
 
 # --- Load Device Data ---
@@ -60,8 +53,9 @@ try:
 except Exception as e:
     logging.error(f"❌ Failed to connect to Docker daemon via socket. Is it mounted correctly? Error: {e}")
     sys.exit(1)
-# --- Start Containers ---
-logging.info(f"🚀 Starting MQTT Consumer containers for image '{IMAGE_NAME}'...")
+
+# --- Start Kafka Consumer Containers ---
+logging.info(f"🚀 Starting Kafka Consumer containers for image '{KAFKA_CONSUMER_IMAGE_NAME}'...")
 
 processed_device_types = set() # Keep track of types already processed
 for device_type, devices in device_data.items(): # device_data is a dictionary like {"tv": [...], "ac": [...]}
@@ -69,7 +63,7 @@ for device_type, devices in device_data.items(): # device_data is a dictionary l
         continue # Skip if no devices for this type or already processed
 
     try:
-        container_name = f"mqtt_consumer_{device_type}"
+        container_name = f"kafka_consumer_{device_type}"
         logging.info(f"\nProcessing device type: {device_type} -> Container: {container_name}")
 
         # Remove existing container with the same name first
@@ -87,21 +81,20 @@ for device_type, devices in device_data.items(): # device_data is a dictionary l
         # Define environment variables for the new container
         environment_vars = {
             "DEVICE_TYPE": device_type,
-            "MQTT_BROKER": MQTT_BROKER_HOST,
             "KAFKA_BROKERS": KAFKA_BROKERS_HOST,
             "PYTHONUNBUFFERED": "1"
+            # Add DB connection strings or other processing-related env vars here later
         }
 
         # Run the new container using the SDK
-        logging.info(f"  Starting container '{container_name}' with image '{IMAGE_NAME}'...")
+        logging.info(f"  Starting container '{container_name}' with image '{KAFKA_CONSUMER_IMAGE_NAME}'...")
         container = docker_client.containers.run(
-            image=IMAGE_NAME,
+            image=KAFKA_CONSUMER_IMAGE_NAME,
             detach=True,
             name=container_name,
             network=DOCKER_NETWORK,
             environment=environment_vars,
-            command=["python", "mqtt_consumer.py"] # <-- Add this line
-
+            command=["python", "kafka_consumer.py"] # Explicitly run the consumer script
         )
 
         logging.info(f"  ✅ Successfully started container '{container_name}' (ID: {container.short_id})")
@@ -111,3 +104,5 @@ for device_type, devices in device_data.items(): # device_data is a dictionary l
         logging.error(f"  ⚠️ Docker API Error starting container '{container_name}': {e}")
     except Exception as e:
         logging.error(f"  ❌ An unexpected error occurred while processing type {device_type}: {e}")
+
+logging.info("\n✅ Kafka Controller finished launching consumer containers.")

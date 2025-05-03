@@ -143,16 +143,6 @@ def connect_and_create_schemas():
                        """
         create_table(cursor, conn, "customers", "customer_staging", create_query)
         create_query = f"""
-                                 CREATE TABLE subscriptions.subscribed_devices (
-                                    id SERIAL PRIMARY KEY,
-                                    device_id VARCHAR(255) NOT NULL,
-                                    subscribed_at TIMESTAMP DEFAULT NOW(),
-                                    expires_at TIMESTAMP NOT NULL,
-                                    subscription_status VARCHAR(20) DEFAULT 'active' -- or 'expired', 'failed'
-                                  );
-                              """
-        create_table(cursor, conn, "subscriptions", "subscribed_devices", create_query)
-        create_query = f"""
                               CREATE TABLE registered_devices.auth_tokens (
                                     token TEXT PRIMARY KEY,
                                     device_id TEXT NOT NULL,
@@ -174,6 +164,17 @@ def connect_and_create_schemas():
                                     );
                                """
         create_table(cursor, conn, "subscriptions", "services", create_query)
+        create_query = f"""
+                                 CREATE TABLE subscriptions.subscribed_devices (
+                                    id SERIAL PRIMARY KEY,
+                                   service_id UUID NOT NULL REFERENCES subscriptions.services(service_id), -- Added FK
+                                    device_id VARCHAR(255) NOT NULL,
+                                    subscribed_at TIMESTAMP DEFAULT NOW(),
+                                    expires_at TIMESTAMP NOT NULL,
+                                    subscription_status VARCHAR(20) DEFAULT 'active' -- or 'expired', 'failed'
+                                  );
+                              """
+        create_table(cursor, conn, "subscriptions", "subscribed_devices", create_query)
         # CREATE INDEX idx_subscriptions_expiry ON subscriptions(expires_at);
         # CREATE INDEX idx_subscriptions_service_device ON subscriptions (service_id, device_id);
 

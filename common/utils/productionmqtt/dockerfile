@@ -1,7 +1,0 @@
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY mqtt_consumer.py . 
-RUN pip install paho-mqtt
-
-CMD ["python", "mqtt_consumer.py"]

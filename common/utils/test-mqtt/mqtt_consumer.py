@@ -4,7 +4,7 @@ import os
 import logging
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
-
+import time
 # --- Basic Logging Setup ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -52,8 +52,8 @@ def on_message(client, userdata, msg):
 
     try:
         # Log reception (optional: decode for logging if needed, but send raw bytes)
-        logging.info(f"📥 Received MQTT message from [{msg.topic}]. Forwarding to Kafka topic [{KAFKA_TOPIC}]...")
-        # logging.debug(f"Payload (decoded for debug): {msg.payload.decode('utf-8', errors='ignore')}")
+        payload_str = msg.payload.decode('utf-8', errors='ignore') # Decode for logging
+        logging.info(f"📥 Received MQTT message from [{msg.topic}]. Forwarding to Kafka topic [{KAFKA_TOPIC}]: {payload_str}")
 
         # Send the raw message payload (bytes) to the specific Kafka topic
         future = producer.send(KAFKA_TOPIC, value=msg.payload)

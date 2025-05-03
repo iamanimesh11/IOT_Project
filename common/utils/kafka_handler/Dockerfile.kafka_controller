@@ -1,0 +1,18 @@
+# Use a slim Python base image
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+COPY kafka_handler/requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the controller script and the necessary JSON configuration files
+COPY kafka_handler/kafka_controller.py .
+COPY kafka_handler/kafka_consumer.py .
+
+COPY json_files ./json_files/
+
+# Command to run the controller script when the container starts
+CMD ["python", "kafka_controller.py"]

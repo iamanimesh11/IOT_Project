@@ -9,7 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code and the json folder
 COPY test-mqtt/mqtt_consumer.py .
-COPY test-mqtt/generator.py .
+COPY test-mqtt/controller.py .
+
 COPY json_files ./json_files/
 
-CMD ["python", "generator.py"]
+CMD ["python", "controller.py"]

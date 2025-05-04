@@ -4,39 +4,38 @@ import psycopg2
 import configparser
 import logging
 
-current_directory = os.getcwd()
 
+def get_root_Directory_path(n):
+    """Calculates the nth parent directory of the current script."""
+    path=os.path.abspath(__file__)
+    for _ in range(n+1):
+        path=os.path.dirname(path)
+    return path
 
+Project_directory = os.getenv("Project_directory", "/app")
 # Determine the correct base directory dynamically
-os.environ['AIRFLOW_HOME'] = os.path.join(current_directory, "pipelines", "airflow")
+if Project_directory == "/app":
+    # Assume /app is the base inside Docker
+    logging.info(f"Detected Docker environment. Using base directory: {Project_directory}")
+else:
+    # Calculate project root based on script location (common/utils -> common -> IOT_Project)
+    Project_directory = get_root_Directory_path(2)
+    logging.info(f"Detected local environment. Using calculated base directory: {Project_directory}")
 
-AIRFLOW_HOME = os.getenv("AIRFLOW_HOME", "/opt/airflow")  # Default to Airflow's path
-if AIRFLOW_HOME != "/opt/airflow":
-    BASE_DIR = os.path.abspath(os.path.join(AIRFLOW_HOME, "..",".."))  # Go one level up from /opt/airflow
-    print("BASE_DIR:", BASE_DIR)  # ✅ Debugging: Print to verify inside container
-    AIRFLOW_HOME = BASE_DIR
-    logging.info("below base_Dir")
-    logging.info(BASE_DIR)
-
-
-COMMON_PATH = os.path.join(AIRFLOW_HOME, "common", "logging_and_monitoring")
-sys.path.append(COMMON_PATH)
-
-common_PATH = os.path.join(AIRFLOW_HOME, "common","logging_and_monitoring","logs") 
-sys.path.append(common_PATH)
-
-config_path=os.path.join(AIRFLOW_HOME, "common", "credentials","config.ini")
+config_path=os.path.join(Project_directory, "common", "credentials","config.ini")
 print(f"config path is :{config_path}")
-# from centralized_logging import setup_logger
 
 # Load the config file
 config = configparser.ConfigParser()
 config.read(config_path)
+if not config.sections():
+    logging.error(f"Config file loaded from {config_path} is empty or invalid.")
+    # Optionally, raise an error or exit
+    # sys.exit(1)
 
-import psycopg2
-import configparser
-
-
+# --- Database Config Loading ---
+# It's generally better practice to load these within functions or a dedicated config loading function
+# to avoid potential errors if the script is imported elsewhere before config is fully loaded.
 db_config = config['database']
 host = db_config['host']
 username = db_config['user']
@@ -53,7 +52,7 @@ def connect_to_db():
             dbname=database_name,
             user=username,
             password=password,
-            host="localhost",
+            host=host, # Use the host loaded from config
             port=port
         )
         conn.autocommit = True
@@ -100,7 +99,7 @@ def connect_and_create_schemas():
             dbname=database_name,
             user=username,
             password=password,
-            host="localhost",
+            host=host, # Use the host loaded from config
             port=port
         )
         conn.autocommit = True

@@ -27,7 +27,7 @@ else:
     device_json_path= os.path.join("json_files","device_models.json") # Corrected path for Docker context
     device_profile_path= os.path.join("json_files","device_profiles.json")
     MQTT_BROKER_HOST = "mosquitto"
-    KAFKA_BROKERS_HOST = "kafka:9092" # Use the service name 'kafka' from docker-compose
+    KAFKA_BROKERS_HOST = "kafka:29092 " # Use the service name 'kafka' from docker-compose
     MQTT_PORT = 1883
 
 logging.info(f"Using device models path: {device_json_path}")

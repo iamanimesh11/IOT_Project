@@ -12,17 +12,24 @@ def get_root_Directory_path(n):
         path=os.path.dirname(path)
     return path
 
-Directory = os.getenv("AIRFLOW_HOME", "inside_docker")  # Default to Airflow's path
+Project_directory = os.getenv("Project_directory", "/app")
+inside_docker=False
 
-if Directory != "inside_docker":
+if Project_directory != "/app":
     root_dir_path=get_root_Directory_path(3)
     logging.info(f"Detected environment outside Docker (AIRFLOW_HOME='{Directory}'). Calculating root path.")
     device_json_path= os.path.join(root_dir_path, "common", "utils","json_files","device_models.json")
     KAFKA_BROKERS_HOST = "localhost:9092" # For local runs outside compose
 else:
-    logging.info("Detected environment inside Docker or AIRFLOW_HOME not set. Using relative path.")
+    logging.info("Detected environment inside Docker. Using relative path.")
     device_json_path= os.path.join("json_files","device_models.json") # Corrected path for Docker context
-    KAFKA_BROKERS_HOST = "kafka:9092" # Use the service name 'kafka' from docker-compose
+    # Use the INTERNAL listener address for containers
+    KAFKA_BROKERS_HOST = "kafka:29092" # <-- Use the internal port
+    REDIS_HOST="redis-server"
+    REDIS_PORT=6379
+    REDIS_DB=0
+    SUBSCRIPTION_CACHE_TTL=300 # Cache TTL in seconds (default 5 mins)
+    inside_docker=True
 
 logging.info(f"Using device models path: {device_json_path}")
 logging.info(f"Kafka brokers for consumer containers: {KAFKA_BROKERS_HOST}")
@@ -82,7 +89,13 @@ for device_type, devices in device_data.items(): # device_data is a dictionary l
         environment_vars = {
             "DEVICE_TYPE": device_type,
             "KAFKA_BROKERS": KAFKA_BROKERS_HOST,
-            "PYTHONUNBUFFERED": "1"
+            "PYTHONUNBUFFERED": "1",
+            "REDIS_HOST":REDIS_HOST,
+            "REDIS_PORT":REDIS_PORT,
+            "REDIS_DB":REDIS_DB,
+            "SUBSCRIPTION_CACHE_TTL":SUBSCRIPTION_CACHE_TTL,
+            "inside_docker":str(inside_docker), # Pass the inside_docker flag to the container
+            
             # Add DB connection strings or other processing-related env vars here later
         }
 

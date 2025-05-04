@@ -11,7 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the controller script and the necessary JSON configuration files
 COPY kafka_handler/kafka_controller.py .
 COPY kafka_handler/kafka_consumer.py .
-
+COPY kafka_handler/Devices_processing_logic ./Devices_processing_logic/
+COPY Database_connection_Utils.py ./common/utils/Database_connection_Utils.py
+COPY config.ini ./common/credentials/config.ini
 COPY json_files ./json_files/
 
 # Command to run the controller script when the container starts

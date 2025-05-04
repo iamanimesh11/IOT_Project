@@ -1,2 +1,4 @@
 kafka-python
 docker
+redis
+psycopg2-binary

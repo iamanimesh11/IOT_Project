@@ -1,6 +1,5 @@
 import os
 import sys
-import psycopg2
 import configparser
 import logging
 import datetime
@@ -25,18 +24,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # --- Kafka Config ---
 kafka_config = config['kafka']
-
 KAFKA_BOOTSTRAP_SERVERS = kafka_config.get('bootstrap_servers', 'localhost:9092')
 SUBSCRIPTION_TOPIC = kafka_config.get('subscription_topic', 'subscription_requests')
-print(KAFKA_BOOTSTRAP_SERVERS)
-print(SUBSCRIPTION_TOPIC)
+
 security_config = config['security']
+SECRET_KEY = security_config.get('jwt_secret_key', fallback='default-fallback-key-if-needed')
 
 # --- Redis ---
 r = redis.Redis(host='localhost', port=6379, db=0)
 
-# --- JWT Secret Key ---
-SECRET_KEY = security_config.get('jwt_secret_key', fallback='default-fallback-key-if-needed')
 
 # --- Kafka Producer ---
 def get_kafka_producer():
@@ -65,10 +61,7 @@ def verify_token(token: str):
     try:
         # Decode the JWT token to verify signature and expiry
         payload = pyjwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        # Optionally, add further checks like querying the DB for the service_id
-        # service_id = payload.get('service_id')
-        # if not service_exists_in_db(service_id): # Hypothetical function
-        #     return None
+        
         return payload  # Return the decoded payload (contains service_id, exp)
     except pyjwt.ExpiredSignatureError:
         logging.warning("Token verification failed: Expired signature")

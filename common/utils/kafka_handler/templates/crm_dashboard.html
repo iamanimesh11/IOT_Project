@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mock CRM Dashboard</title>
+    <meta http-equiv="refresh" content="10"> <!-- Auto-refresh every 10 seconds -->
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+</head>
+<body class="bg-body-tertiary"> <!-- Slightly different light background -->
+    <div class="container mt-4"> <!-- Added container and top margin -->
+        <h1 class="mb-4">Mock CRM Dashboard</h1>
+
+        <!-- Status Counters Card -->
+        <div class="card mb-4">
+            <div class="card-header"> <!-- Removed dark header -->
+                Current Status
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-around"> <!-- Use flexbox for even spacing -->
+                    <p>Total Events: <span class="badge bg-info rounded-pill text-dark fs-6">{{ counters.total_requests }}</span></p> <!-- Changed to info -->
+                    <p>Pending: <span class="badge bg-warning rounded-pill text-dark fs-6">{{ counters.pending_requests }}</span></p>
+                    <p>Solved: <span class="badge bg-success rounded-pill fs-6">{{ counters.solved_requests }}</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Table Card -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center"> <!-- Removed dark header -->
+                Recent Events
+                <div class="btn-group" role="group" aria-label="Filter events"> <!-- Bootstrap button group for filters -->
+            <a href="{{ url_for('get_crm_dashboard') }}?state=all" class="btn btn-outline-secondary btn-sm {% if current_filter == 'all' %}active{% endif %}"><i class="bi bi-list-ul"></i> All</a> <!-- Added icon -->
+            <a href="{{ url_for('get_crm_dashboard') }}?state=pending" class="btn btn-outline-secondary btn-sm {% if current_filter == 'pending' %}active{% endif %}"><i class="bi bi-hourglass-split"></i> Pending</a> <!-- Added icon -->
+            <a href="{{ url_for('get_crm_dashboard') }}?state=solved" class="btn btn-outline-secondary btn-sm {% if current_filter == 'solved' %}active{% endif %}"><i class="bi bi-check2-circle"></i> Solved</a> <!-- Added icon -->
+    </div>
+            </div>
+            <div class="card-body p-0"> <!-- Remove padding for table to fit edge-to-edge -->
+                <div class="table-responsive"> <!-- Make table scroll horizontally on small screens -->
+                    <table class="table table-bordered table-hover table-sm mb-0"> <!-- Removed table-striped -->
+                        <thead class="table-light"> <!-- Light table header -->
+                            <tr><th>Received</th><th>Device ID</th><th>Type</th><th>Error</th><th>State</th><th>Owner</th><th>Contact</th><th>Action</th></tr>
+                        </thead>
+                        <tbody>
+        {% for event in error_events %}
+                            <tr class="{% if event.request_state == 'pending' %}table-warning{% elif event.request_state == 'solved' %}table-success{% endif %}"> <!-- Contextual row color -->
+            <td>{{ event.received_timestamp.strftime('%Y-%m-%d %H:%M:%S') if event.received_timestamp else 'N/A' }}</td>
+                                <td>{{ event.device_id }}</td>
+                                <td>{{ event.device_type }}</td>
+                                <td>{% if event.error_code %}<span class="badge bg-danger">{{ event.error_code }}</span>{% else %}-{% endif %}</td> <!-- Error code badge -->
+                                <td>{{ event.request_state }}</td>
+                                <td>{{ event.owner_name if event.owner_name != 'N/A' else '-' }}</td> <!-- Show '-' if N/A -->
+                                <td>{{ event.owner_contact }}</td>
+            <td>
+                {% if event.request_state == 'pending' %}
+                <form action="/solve_event/{{ event.event_id }}" method="post" style="margin:0;">
+                    <button type="submit" class="btn btn-outline-success btn-sm"><i class="bi bi-check-lg"></i> Mark Solved</button> <!-- Outline button with icon -->
+                </form>
+                {% elif event.request_state == 'solved' %}
+                <span class="text-success fw-bold">Marked</span> <!-- Bootstrap text/font classes -->
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+                            <tr><td colspan="8" class="text-center p-4">No recent events found or error fetching data.</td></tr> <!-- Centered text with padding -->
+        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> <!-- Close main container -->
+</body>
+</html>

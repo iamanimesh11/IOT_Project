@@ -13,6 +13,7 @@ def get_root_Directory_path(n):
     return path
 
 Project_directory = os.getenv("Project_directory", "/app")
+print(Project_directory)
 # Determine the correct base directory dynamically
 if Project_directory == "/app":
     # Assume /app is the base inside Docker
@@ -142,7 +143,7 @@ def connect_and_create_schemas():
                        """
         create_table(cursor, conn, "customers", "customer_staging", create_query)
         create_query = f"""
-                              CREATE TABLE registered_devices.auth_tokens (
+                              CREATE TABLE  IF NOT EXISTS  registered_devices.auth_tokens (
                                     token TEXT PRIMARY KEY,
                                     device_id TEXT NOT NULL,
                                     issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -153,7 +154,7 @@ def connect_and_create_schemas():
                     """
         create_table(cursor, conn, "registered_devices", "auth_tokens", create_query)
         create_query = f"""
-                                    CREATE TABLE subscriptions.services (
+                                    CREATE TABLE  IF NOT EXISTS  subscriptions.services (
                                         service_id UUID PRIMARY KEY ,
                                         service_name VARCHAR(100) NOT NULL UNIQUE,
                                         service_key TEXT NOT NULL,
@@ -164,7 +165,7 @@ def connect_and_create_schemas():
                                """
         create_table(cursor, conn, "subscriptions", "services", create_query)
         create_query = f"""
-                                 CREATE TABLE subscriptions.subscribed_devices (
+                                 CREATE TABLE  IF NOT EXISTS subscriptions.subscribed_devices (
                                     id SERIAL PRIMARY KEY,
                                    service_id UUID NOT NULL REFERENCES subscriptions.services(service_id), -- Added FK
                                     device_id VARCHAR(255) NOT NULL,
@@ -174,6 +175,20 @@ def connect_and_create_schemas():
                                   );
                               """
         create_table(cursor, conn, "subscriptions", "subscribed_devices", create_query)
+        create_query = f"""
+                                CREATE TABLE IF NOT EXISTS customers.error_events (
+                                    event_id SERIAL PRIMARY KEY,
+                                    received_timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP, -- When the CRM received the event
+                                    device_id VARCHAR(255) NOT NULL, -- Adjust size/type if needed (e.g., UUID)
+                                    device_type VARCHAR(100),
+                                    error_code VARCHAR(100),
+                                    event_timestamp TIMESTAMPTZ, -- Timestamp from the original device payload
+                                    owner_name VARCHAR(255),
+                                    owner_contact VARCHAR(255),
+                                    request_state VARCHAR(50) -- e.g., 'pending', 'resolved', 'ignored'       
+                                  );
+                              """
+        create_table(cursor, conn, "customers", "error_events", create_query)
         # CREATE INDEX idx_subscriptions_expiry ON subscriptions(expires_at);
         # CREATE INDEX idx_subscriptions_service_device ON subscriptions (service_id, device_id);
 

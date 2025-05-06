@@ -1,34 +1,19 @@
 {
-  "refrigerator": [
+ 
+  "AirConditioner": [
     {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_1"
+      "model_name": "TS-Q19YNZE1",
+      "device_id": "59df09f2-d81f-44c9-9397-222e0c2262a6"
     },
     {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_2"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_3"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_4"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_5"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_6"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_7"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_8"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_9"
-    },
-    {
-      "model_name": "Whirlpool_Ref", "device_id": "ref_101_10"
+      "model_name": "TS-Q19YNZE1",
+      "device_id": "4f78cb9b-e4f9-40d9-bb53-5663f1165d39"
     }
+  ],
+  "Refrigerator": [
+    {
+      "model_name": "GL-B221ASCY", "device_id":"dd9555d5-5b8f-4bad-a56e-202cc5b750df"
+    }
+   
   ]
 }

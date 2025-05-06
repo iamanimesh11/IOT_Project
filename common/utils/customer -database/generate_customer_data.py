@@ -1,6 +1,9 @@
 from faker import Faker
 import psycopg2
-import time
+import time,os,sys
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 from common.utils.Database_connection_Utils import connect_and_create_schemas
 import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

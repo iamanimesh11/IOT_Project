@@ -79,7 +79,7 @@ def generate_telemetry(device):
 
     status_options = profile.get("status", ["unknown"])
     error_options = profile.get("errors", [])
-    error = random.choice(error_options) if random.random() < 0.1 else None
+    error = random.choice(error_options)
 
 
     payload = {
@@ -120,7 +120,7 @@ try:
 
         logging.info(f"📡 Published to [{topic}]: {payload}")
         #time.sleep(random.uniform(1, 3))  # Send every 1–3 seconds
-        time.sleep(60)  # Send every 1–3 seconds
+        time.sleep(20)  # Send every 1–3 seconds
 except KeyboardInterrupt:
     logging.info("\n🔌 Simulation stopped by user.")
 finally:

@@ -1,11 +1,13 @@
 import psycopg2
-import io
+import io,os,sys
 import re
 import logging
-import time
+import time, os, json
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 from common.utils.Database_connection_Utils import connect_and_create_schemas
 
 # Connect to DB
@@ -120,14 +122,19 @@ def mark_missing_devices(CURSOR, connection, schema, table_name, device_type, mo
         logging.error(f"Error marking missing devices in {schema}.{table_name}: {e}")
         return False
 
-def Output_devices_to_json_file(device_model_dict):
-    output_file = "device_models.json"
+def output_devices_to_json_file(device_model_dict):
+    output_dir = "json_files"
+    output_file_name = "device_models.json"
+    output_file_path = os.path.join(output_dir, output_file_name)
+
     try:
-        with open(output_file, 'w') as f:
+        # Create the directory if it doesn't exist
+        os.makedirs(output_dir, exist_ok=True)
+        with open(output_file_path, 'w') as f:
             json.dump(device_model_dict, f, indent=4)  # Use indent for pretty formatting
-        logging.info(f"Device type and model names written to '{output_file}'")
+        logging.info(f"Device type and model names written to '{output_file_path}'")
     except IOError as e:
-        logging.error(f"Error writing to '{output_file}': {e}")
+        logging.error(f"Error writing to '{output_file_path}': {e}")
 
 
 
@@ -142,7 +149,7 @@ if __name__ == "__main__":
     unique_type_models = CURSOR.fetchall()
     device_model_dict = {device_type: model for device_type, model in unique_type_models}
 
-    Output_devices_to_json_file(device_model_dict)
+    output_devices_to_json_file(device_model_dict)
 
     logging.info(f"Found {len(unique_type_models)} unique device type/model combinations in staging.")
     current_staging_table_names = set()

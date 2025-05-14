@@ -74,7 +74,8 @@ Real-time visualization of system metrics, device errors, and subscription statu
 
 | Component      | Tool / Service        | Logo                              |
 |----------------|-----------------------|-----------------------------------|
-| **Data Source** | TomTom, Overpass, WeatherAPI ||
+| **Data Source** | Mock data generated via python | <img src="https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/community/logos/python-logo-only.png" alt="Python" width="70"/>|
+
 | **Scheduler**  | Apache Airflow         | <img src="https://icon.icepanel.io/Technology/svg/Apache-Airflow.svg" alt="Airflow" width="70"/> |
 | **Streaming**  | Apache Kafka           | <img src="https://irisidea.com/wp-content/uploads/2024/04/kafka-implementation-experience--450x231.png" alt="Kafka" width="120"/> |
 | **Storage**    | PostgreSQL             | <img src="https://www.logo.wine/a/logo/PostgreSQL/PostgreSQL-Logo.wine.svg" alt="PostgreSQL" width="120"/> |

@@ -81,7 +81,6 @@ Real-time visualization of system metrics, device errors, and subscription statu
 | **Logging**    | Grafana Loki           | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/2005px-Grafana_logo.svg.png" alt="Grafana Loki" width="100"/> |
 | **UI framework**    | Streamlit           | <img src="https://streamlit.io/images/brand/streamlit-logo-primary-colormark-darktext.png" alt="Streamlit" width="180"/> |
 | **Containerization**  | Docker, Docker Compose | <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/97_Docker_logo_logos-1024.png" alt="Docker" width="100"/>|
-| **API & Credentials**   | Firebase               | <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxQktpK3Jy3GkxXutGPzl8R3OBCNMxfFWP5A&s" alt="Firebase" width="130"/>|
 | **Alerts and other**   | Discord               | <img src="https://pngimg.com/uploads/discord/discord_PNG3.png" alt="Discord" width="110"/>|
 | **Language**   | Python                 | <img src="https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/community/logos/python-logo-only.png" alt="Python" width="70"/>|
 

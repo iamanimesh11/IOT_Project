@@ -1,6 +1,6 @@
 # 🚦 Real-Time  ETL of Road Traffic & Weather Monitoring.
 
-> 🛰️ An end-to-end real-time data engineering pipeline to collect, process, and visualize road traffic & weather data using **Kafka**, **Airflow**, **PostgreSQL**, and **Grafana Loki**—fully containerized with **Docker**.
+> 🛰️ An end-to-end real-time data engineering pipeline to simulate real-world IoT device events with scalable backend processing, service subscriptions, and real-time event delivery using modern data engineering tools.
 
 ---
 **Remarks**:  
@@ -33,20 +33,28 @@ In real-world Data Engineering projects, deploying a full-scale production setup
 - **🐳 Fully Dockerized Architecture**  
   Deploy the entire stack with a single `docker-compose up --build` — no manual setup.
 
-- **⚙️ Real-Time ETL Pipeline with Kafka Streaming**  
-  Data is streamed in real-time using Apache Kafka, then processed via Python-based ETL jobs and stored in PostgreSQL.
+- **⚙️ Real-Time IoT Event Simulation**  
+  Continuously generates mock telemetry data from simulated IoT devices like Refrigerators, TVs, and Washing Machines..
 
 - **⏰ Airflow-Based Workflow Orchestration**  
-  Apache Airflow schedules and manages ETL workflows and task dependencies.
+Airflow is integrated to schedule background tasks such as data validation, expired subscription cleanup, and periodic telemetry batch processing.
+
   
 - **📡 Apache Kafka for High-Throughput Streaming**  
-  Handles real-time data ingestion and decoupling between data producers and consumers.
+  Events are routed through Kafka, with device-type-specific consumer containers for modular and scalable processing.
+
+- **🛠️ FastAPI Backend for Service Registration , Subscriptiong,webhook**  
+Enables external services to register and subscribe to specific device IDs for real-time event delivery.
+- 📁 JSON, PostgreSQL, and Redis Integration
+   Combines persistent storage (PostgreSQL), structured configurations (JSON), and in-memory speed (Redis).
+
 
 - **📝 Centralized Logging with Loki**  
-  All logs from Python apps and Airflow tasks are sent to Grafana Loki for monitoring and troubleshooting.
+  All logs from Python apps and services tasks are sent to Grafana Loki for monitoring and troubleshooting.
 
 - **📊 Visual Monitoring with Grafana**  
-  Dashboards offer real-time insights into pipeline performance, traffic flow, and logs.
+Real-time visualization of system metrics, device errors, and subscription statuses using Grafana dashboards.
+
 
 - **🔔 Notification System (Optional)**  
   Sends ETL job alerts (success/failure) via Discord webhooks.
@@ -57,9 +65,9 @@ In real-world Data Engineering projects, deploying a full-scale production setup
 - **💾 Persistent PostgreSQL Storage**  
   Maintains structured data and ensures durability across restarts.
 
-- **📁 Configurable & Extensible**  
-  Clean modular structure with support for external config files, secrets, and new data sources.
-
+- **🧪 Mock CRM Integration**  
+    Simulates CRM system behavior by receiving device alerts and acting on customer-device mappings.
+  
 - **👨‍💻 Plug-and-Play for Recruiters**  
   Instantly clonable and runnable — ideal for technical demos or code evaluations.
 

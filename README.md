@@ -38,23 +38,21 @@ In real-world Data Engineering projects, deploying a full-scale production setup
 
 - **⏰ Airflow-Based Workflow Orchestration**  
 Airflow is integrated to schedule background tasks such as data validation, expired subscription cleanup, and periodic telemetry batch processing.
-
   
 - **📡 Apache Kafka for High-Throughput Streaming**  
   Events are routed through Kafka, with device-type-specific consumer containers for modular and scalable processing.
 
 - **🛠️ FastAPI Backend for Service Registration , Subscriptiong,webhook**  
-Enables external services to register and subscribe to specific device IDs for real-time event delivery.
-- 📁 JSON, PostgreSQL, and Redis Integration
-   Combines persistent storage (PostgreSQL), structured configurations (JSON), and in-memory speed (Redis).
+    Enables external services to register and subscribe to specific device IDs for real-time event delivery.
 
+- **📁 JSON, PostgreSQL, and Redis Integration**
+   Combines persistent storage (PostgreSQL), structured configurations (JSON), and in-memory speed (Redis).
 
 - **📝 Centralized Logging with Loki**  
   All logs from Python apps and services tasks are sent to Grafana Loki for monitoring and troubleshooting.
 
 - **📊 Visual Monitoring with Grafana**  
 Real-time visualization of system metrics, device errors, and subscription statuses using Grafana dashboards.
-
 
 - **🔔 Notification System (Optional)**  
   Sends ETL job alerts (success/failure) via Discord webhooks.
@@ -76,7 +74,7 @@ Real-time visualization of system metrics, device errors, and subscription statu
 
 | Component      | Tool / Service        | Logo                              |
 |----------------|-----------------------|-----------------------------------|
-| **Data Source** | TomTom, Overpass, WeatherAPI | <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Tomtom_logo.jpg" alt="TomTom" width="50"/> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Openstreetmap_logo.svg/225px-Openstreetmap_logo.svg.png" alt="Overpass" width="50"/> <img src="https://openweathermap.org/themes/openweathermap/assets/img/logo_white_cropped.png" alt="WeatherAPI" width="50"/> |
+| **Data Source** | TomTom, Overpass, WeatherAPI ||
 | **Scheduler**  | Apache Airflow         | <img src="https://icon.icepanel.io/Technology/svg/Apache-Airflow.svg" alt="Airflow" width="70"/> |
 | **Streaming**  | Apache Kafka           | <img src="https://irisidea.com/wp-content/uploads/2024/04/kafka-implementation-experience--450x231.png" alt="Kafka" width="120"/> |
 | **Storage**    | PostgreSQL             | <img src="https://www.logo.wine/a/logo/PostgreSQL/PostgreSQL-Logo.wine.svg" alt="PostgreSQL" width="120"/> |

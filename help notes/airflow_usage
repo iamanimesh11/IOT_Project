@@ -1,0 +1,86 @@
+Based on your complete project setup — a **real-time IoT event simulation and processing system** — you can use **Apache Airflow** to handle **orchestrated tasks**, **monitoring**, and **data processing workflows** that are not part of the real-time stream itself but are crucial for support, analytics, and system health.
+
+Here’s exactly **how and where Airflow can fit into your project**:
+
+---
+
+## 🔁 How Airflow Can Be Used in Your IoT ETL Project
+
+### ✅ 1. **Data Aggregation & ETL Pipelines**
+
+Airflow can be used to:
+
+* Periodically **aggregate and summarize telemetry data** from Kafka topics or the final database.
+* Run scheduled ETL pipelines to:
+
+  * Cleanse the data
+  * Transform telemetry and error logs
+  * Store them into a **historical data warehouse** (like PostgreSQL, Snowflake, etc.)
+
+Example DAG:
+
+```python
+- Extract hourly data from PostgreSQL
+- Clean/Transform to highlight error frequency per device
+- Load it into a reporting table for BI tools
+```
+
+---
+
+### 📊 2. **Generate Daily or Weekly Reports**
+
+* Airflow can generate reports like:
+
+  * **Device health trends**
+  * **Most error-prone models**
+  * **Inactive devices**
+* These reports can be sent via email or posted to dashboards (like Grafana or a custom web UI).
+
+---
+
+### 🔐 3. **Subscription Expiry Checker**
+
+You mentioned subscriptions tied to devices. Use Airflow to:
+
+* Check every day/hour which service-device subscriptions are about to **expire**
+* Send notifications or **auto-remove expired subscriptions** from Redis and PostgreSQL
+
+---
+
+### 📈 4. **Push Processed Data to Grafana**
+
+* Airflow can run a DAG that exports **daily metrics** to a **time-series database (like InfluxDB or Prometheus)**, which Grafana then uses to display live charts.
+
+---
+
+### 🛠️ 5. **Infrastructure Health Checks**
+
+* Create a DAG that:
+
+  * Pings your **MQTT broker**, **Kafka cluster**, and **FastAPI endpoints**
+  * Logs and alerts if any service is down or slow
+  * Sends notification to Slack/Discord if failure is detected
+
+---
+
+### 🔄 6. **Device Profile Updater**
+
+* If your `device_profile.json` (status and error types) is updated manually or from an external source, use Airflow to:
+
+  * **Fetch the latest file**
+  * Validate JSON schema
+  * Push to Redis or file storage
+  * Notify teams if new device types or error codes are added
+
+---
+
+### 💡 7. **Backfill or Replay Events (Simulation)**
+
+* If you need to **re-simulate past device events** for testing or analytics, Airflow can trigger a script to:
+
+  * Fetch old telemetry records
+  * Push them back into MQTT or Kafka for reprocessing
+
+---
+
+Would you like me to help you define a few specific DAG examples or draw a visual flow of how Airflow fits into your current architecture?

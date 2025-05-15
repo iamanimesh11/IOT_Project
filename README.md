@@ -1,4 +1,4 @@
-# 🚦 Real-Time  ETL of Road Traffic & Weather Monitoring.
+# ⚡ Real-Time IOT ETL for Reactive and Predective Maintenance
 
 > 🛰️ An end-to-end real-time data engineering pipeline to simulate real-world IoT device events with scalable backend processing simulation, service subscriptions, and real-time event delivery to CRM  using modern data engineering tools.
 
@@ -27,8 +27,6 @@ In real-world Data Engineering projects, deploying a full-scale production setup
 
 
 ## 🔑 Key Features
-
-
 
 - **🐳 Fully Dockerized Architecture**  
   Deploy the entire stack with a single `docker-compose up --build` — no manual setup.

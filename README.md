@@ -76,7 +76,7 @@ Real-time visualization of system metrics, device errors, and subscription statu
 | **Streaming**  | Apache Kafka           | <img src="https://irisidea.com/wp-content/uploads/2024/04/kafka-implementation-experience--450x231.png" alt="Kafka" width="120"/> |
 | **Storage**    | PostgreSQL             | <img src="https://www.logo.wine/a/logo/PostgreSQL/PostgreSQL-Logo.wine.svg" alt="PostgreSQL" width="120"/> |
 | **Logging**    | Grafana Loki           | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/2005px-Grafana_logo.svg.png" alt="Grafana Loki" width="100"/> |
-| **Mmeory Based Storage**    | Redis  | <img src="[https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/2005px-Grafana_logo.svg.png](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdtAvGoJcM9g2e771ie7AmJfeZ_SQG-BrGYw&s)" alt="Redis" width="100"/>|
+| **Memory Based Storage**    | Redis  | <img src="https://geelongwebdesign.com.au/wp-content/uploads/2025/04/redis-web-hosting-service-01.png" alt="Redis" width="100"/>|
 | **UI framework**    | Streamlit           | <img src="https://streamlit.io/images/brand/streamlit-logo-primary-colormark-darktext.png" alt="Streamlit" width="180"/> |
 | **Containerization**  | Docker, Docker Compose | <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/97_Docker_logo_logos-1024.png" alt="Docker" width="100"/>|
 | **Alerts and other**   | Discord               | <img src="https://pngimg.com/uploads/discord/discord_PNG3.png" alt="Discord" width="110"/>|

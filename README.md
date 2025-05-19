@@ -383,11 +383,16 @@ To ensure visibility into the system's operations and health, this project integ
 
 ## 🗃️ Data Stored
 
-| Table Name       | Description                      |
-|------------------|----------------------------------|
-| roads_traffic     | Road metadata from Overpass API |
-| traffic_flow_data | Real-time traffic speed data    |
-| weather_conditions| Weather data per coordinate     |
+The following tables are created and managed by the system:
+
+| Table Name                        | Purpose                                                                                                |
+|-----------------------------------|--------------------------------------------------------------------------------------------------------|
+| `registered_devices.device_staging` | Stores initial registration information for IoT devices before full provisioning or for staging data.  |
+| `customers.customer_staging`        | Holds staging information for customers, linking them to their registered devices.                     |
+| `registered_devices.auth_tokens`    | Manages authentication tokens issued to devices for secure communication.                              |
+| `subscriptions.services`            | Defines the available services that devices can subscribe to, including their API keys and callbacks.  |
+| `subscriptions.subscribed_devices`  | Tracks active subscriptions, linking devices to the services they are currently using.                 |
+| `customers.error_events`            | Logs error events reported by devices,  used for CRM, support, and troubleshooting purposes.      |
 
 ---
 

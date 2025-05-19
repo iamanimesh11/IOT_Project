@@ -1,6 +1,10 @@
+![Status](https://img.shields.io/badge/Status-🚧_Updating_Regularly-yellow?style=for-the-badge)
+
 # ⚡ Real-Time IOT ETL for Reactive and Predective Maintenance
 
 > 🛰️ An end-to-end real-time data engineering pipeline to simulate real-world IoT device events with scalable backend processing simulation, service subscriptions, and real-time event delivery to CRM  using modern data engineering tools.
+
+
 
 ---
 **Remarks**:  
@@ -21,7 +25,6 @@ In real-world Data Engineering projects, deploying a full-scale production setup
 - [Directory Structure](#directory-structure)
 - [Configurations](#configurations)
 - [Logging & Monitoring](#-logging--monitoring)
-- [Screenshots](#screenshots)
 - [Future Scope](#-future-scope)
 - [Author](#-author)
 
@@ -75,8 +78,11 @@ Real-time visualization of system metrics, device errors, and subscription statu
 | **Data Source** | Mock data generated via python | <img src="https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/community/logos/python-logo-only.png" alt="Python" width="70"/>|
 | **Scheduler**  | Apache Airflow         | <img src="https://icon.icepanel.io/Technology/svg/Apache-Airflow.svg" alt="Airflow" width="70"/> |
 | **Streaming**  | Apache Kafka           | <img src="https://irisidea.com/wp-content/uploads/2024/04/kafka-implementation-experience--450x231.png" alt="Kafka" width="120"/> |
+| **Messaging Protocol** | MQTT (Eclipse Mosquitto) | <img src="https://www.donskytech.com/wp-content/uploads/2023/02/Mqtt-hor.svg_.png" alt="MQTT" width="100"/> |
+| **API Frameworks**     | FastAPI, Flask         | <img src="https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png" alt="FastAPI" width="90"/> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Flask_logo.svg/768px-Flask_logo.svg.png" alt="Flask" width="50"/> |
 | **Storage**    | PostgreSQL             | <img src="https://www.logo.wine/a/logo/PostgreSQL/PostgreSQL-Logo.wine.svg" alt="PostgreSQL" width="120"/> |
 | **Logging**    | Grafana Loki           | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/2005px-Grafana_logo.svg.png" alt="Grafana Loki" width="100"/> |
+| **Memory Based Storage**    | Redis  | <img src="https://geelongwebdesign.com.au/wp-content/uploads/2025/04/redis-web-hosting-service-01.png" alt="Redis" width="100"/>|
 | **UI framework**    | Streamlit           | <img src="https://streamlit.io/images/brand/streamlit-logo-primary-colormark-darktext.png" alt="Streamlit" width="180"/> |
 | **Containerization**  | Docker, Docker Compose | <img src="https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/97_Docker_logo_logos-1024.png" alt="Docker" width="100"/>|
 | **Alerts and other**   | Discord               | <img src="https://pngimg.com/uploads/discord/discord_PNG3.png" alt="Discord" width="110"/>|
@@ -90,20 +96,6 @@ Real-time visualization of system metrics, device errors, and subscription statu
 
 
 # 🚀 Getting Started
-
-## ⚠️ IMPORTANT
-
-<p align="left">
-  <img src="https://img.freepik.com/free-vector/www-concept-illustration_114360-2143.jpg?t=st=1744565213~exp=1744568813~hmac=cc0420ee0ca016a8962950768146a9a73c652ef7e93dfd0f6be86f2c3eca7cb6&w=826" alt="API Status" width="200"/>
-</p>
-
-> Before cloning and running this project, **please ensure that the API is up and running.**
-
-🔗 **[Visit Project App](https://realtimeetlroadtrafficweather.vercel.app/#)**  
-Make sure the API is **not down** before proceeding.
-
-💡 Once the API is confirmed to be **live and functional**, you can go ahead and clone the repo, and run the project locally. 
-Just follow the steps below 👇
 
 
 ## ✅ Prerequisites
@@ -143,39 +135,41 @@ docker-compose up -d --build
 ├── .env
 ├── .gitattributes
 ├── .gitignore
+├── device_models.json
 ├── docker-compose.yml
 ├── Dockerfile
-└── README.md
+├── project summary.txt
+├── README.md
+└── temp.py
+├── idea
+│   ├── .gitignore
+│   ├── material_theme_project_new.xml
+│   ├── misc.xml
+│   ├── modules.xml
+│   ├── project_IOT_LG.iml
+│   └── vcs.xml
+│   ├── inspectionProfiles
+│   │   ├── profiles_settings.xml
+│   │   └── Project_Default.xml
 ├── additionals
 │   ├── backup.sqlc
 │   ├── project_structure.json
 │   ├── PROJECT_STRUCTURE.md
 │   ├── project_structure_json_creator.py
 │   └── text_Search.py
+├── asset
+│   └── workflow.gif
 ├── common
+│   ├── __init__ copy.py
 │   └── __init__.py
-│   ├── common
-│   │   ├── logging_and_monitoring
-│   │   │   ├── logs
-│   │   │   │   └── loki_errors.text
 │   ├── credentials
 │   │   ├── config.ini
-│   │   ├── firebase_cred.json
 │   │   └── red-button-442617-a9-89794f0a5b90.json
 │   ├── logging_and_monitoring
 │   │   ├── centralized_logging.py
 │   │   └── firebase_db_api_utils.log
-│   │   ├── logs
-│   │   │   ├── api_utils.log
-│   │   │   ├── database_connection.log
-│   │   │   ├── db_utils.log
-│   │   │   ├── firebase_db_api_utils.log
-│   │   │   ├── kafka_consumer.log
-│   │   │   ├── loki_errors.text
-│   │   │   ├── road_data_main.log
-│   │   │   ├── Road_Producer.log
-│   │   │   ├── Traffic_consumer.log
-│   │   │   └── Traffic_Producer.log
+│   ├── logs
+│   │   └── loki_errors.text
 │   ├── streamlit
 │   │   ├── database_logger dashboard-7-4.json
 │   │   ├── Dockerfile
@@ -197,17 +191,56 @@ docker-compose up -d --build
 │   │   ├── loki_files
 │   │   │   ├── log_sent _to_loki.py
 │   │   │   └── loki_request_python.py
+│   ├── test
+│   │   ├── device_models.json
+│   │   ├── readjson.py
+│   │   ├── t.html
+│   │   ├── temp.html
+│   │   └── tojson.py
 │   ├── utils
-│   │   ├── api_utils.py
-│   │   ├── config_loader.py.py
+│   │   ├── config.ini
 │   │   ├── Database_connection_Utils.py
-│   │   ├── db_utils.py
-│   │   ├── extract_Data_from_link_using_DIFFBOT.py
-│   │   ├── firebase_db_api_track_util.py
-│   │   ├── genai_text_Extracter.py
-│   │   ├── kafka_modify_Topics_utils.py
-│   │   └── trafficHelper_utils.py
+│   │   ├── service_registration.py
+│   │   └── __init__.py
+│   │   ├── Subscription
+│   │   │   ├── backend_subscription_consumer.py
+│   │   │   ├── bulk_subscribe.py
+│   │   │   ├── Database_connection_Utils.py
+│   │   │   └── POST subscribe Event.py
+│   │   ├── customer -database
+│   │   │   ├── create_kafka_topics.py
+│   │   │   ├── Customers_Tables_Creator.py
+│   │   │   └── generate_customer_data.py
+│   │   ├── get-devices
+│   │   │   ├── dynamic_Devices_Tables_creator.py
+│   │   │   ├── fastapi generates device data.py
+│   │   │   ├── get-devices from fastapi.py
+│   │   │   ├── staging_table_creation.py
+│   │   │   └── __init__.py
+│   │   ├── json_files
+│   │   │   ├── device_models.json
+│   │   │   └── device_profiles.json
+│   │   ├── kafka_handler
+│   │   │   ├── Dockerfile.kafka_controller
+│   │   │   ├── kafka_consumer.py
+│   │   │   ├── kafka_controller.py
+│   │   │   ├── mock_crm.py
+│   │   │   ├── requirements.txt
+│   │   │   └── webhook_receiver.py
+│   │   │   ├── Devices_processing_logic
+│   │   │   │   └── refrigerator_processing_logic.py
+│   │   │   ├── templates
+│   │   │   │   └── crm_dashboard.html
+│   │   ├── test-mqtt
+│   │   │   ├── controller.py
+│   │   │   ├── dockerfile
+│   │   │   ├── dockerfile_consumer_and_controller
+│   │   │   ├── generator.py
+│   │   │   ├── mqtt_consumer.py
+│   │   │   ├── requirements.txt
+│   │   │   └── __init__.py
 ├── config
+│   ├── db_initialize.sh
 │   ├── init-db.sql
 │   ├── loki-config.yml
 │   ├── loki.json
@@ -219,6 +252,16 @@ docker-compose up -d --build
 │   │   │   ├── Airflow Log Analytics.json
 │   │   │   ├── dashboard.yml
 │   │   │   └── ETL dashboard.json
+├── help notes
+│   ├── airflow_usage
+│   └── why mqtt and kafka both
+├── json_files
+│   └── device_models.json
+├── mosquitto
+│   ├── config
+│   │   └── mosquitto.conf
+│   ├── data
+│   ├── log
 ├── pipelines
 │   ├── airflow
 │   │   ├── airflow.cfg
@@ -227,10 +270,7 @@ docker-compose up -d --build
 │   │   ├── requirements.txt
 │   │   └── webserver_config.py
 │   │   ├── dags
-│   │   │   ├── DAG_kafka_road_producer.py
-│   │   │   ├── DAG_kafka_traffic_producer.py
 │   │   │   └── DAG_Monitor_ETL_health.py
-│   │   ├── plugins
 │   ├── kafka_files
 │   │   ├── Dockerfile
 │   │   ├── Dockerfile_consumer_traffic
@@ -241,10 +281,11 @@ docker-compose up -d --build
 │   │   ├── traffic_consumer.py
 │   │   ├── traffic_producer.py
 │   │   └── __init__.py
-│   ├── scripts
 ├── shared
+│   ├── info_collected.flag
+│   ├── start_logged.txt
+│   ├── user_info.json
 │   └── wait-for-flag.sh
-
 ```
 
 
@@ -287,38 +328,50 @@ Postgrsql Database initialized at startup of Postgresql container with default c
 ---
 
 
-## 📊 Logging & Monitoring
+## 📊 Logging and Monitoring
 
+To ensure visibility into the system's operations and health, this project integrates robust **logging** and **monitoring** mechanisms:
 
-This project implements a **centralized logging and monitoring system** using **Grafana Loki**, ensuring transparency, debuggability, and maintainability across all services.
+### 🔍 Logging with Grafana Loki
 
-### Key Highlights
+- All system logs, including data pipeline activities and API interactions, are streamed to **Grafana Loki**.
+- Logs are labeled by component (e.g., `airflow`, `fastapi`, `kafka`, `mqtt`) for easy filtering.
+- Structured logging (JSON format) is used where applicable to allow advanced querying in Grafana.
 
-- **Structured Logging**  
-  All Python scripts across Kafka producers/consumers, Airflow DAGs, and data pipelines generate structured logs with timestamp, service name, event type, and status.
+### 📈 Visualization with Grafana
 
-- **Centralized Collection with Grafana Loki**  
-  Logs from all services are collected and pushed to Loki using `Promtail`. These logs are accessible in real-time via **Grafana dashboards**.
+- **Grafana** dashboards provide real-time visual insights into:
+  - Task executions (success/failure counts)
+  - Kafka message flow and throughput
+  - API request/response times
+  - Redis cache hit/miss ratio
+  - MQTT connection status and message counts
+- Dashboards are customizable to add alerts, thresholds, and trend analysis.
 
-- **Dockerized Monitoring Stack**  
-  - `Grafana` for visualization  
-  - `Loki` for log storage  
-  - `Promtail` for log shipping  
-  These services are configured in `docker-compose.yml` with persistent volume storage.
+### 🚨 Alerting
 
-- **Real-Time Debugging**  
-  Logs include all critical operations such as:
-  - API calls (Overpass, TomTom, WeatherAPI)  
-  - Kafka message flow  
-  - Database operations (insert/update/failure)  
-  - Retry attempts and error messages  
+- Alerts are configured in Grafana to notify via **Discord** for:
+  - Task failures in Airflow
+  - Abnormal data trends or system errors
+  - Service downtime (e.g., Kafka broker or API unresponsive)
 
-- **Failover & Local Storage**  
-  In case of Grafana/Loki downtime, logs are safely written to local files and retried later to avoid data loss.
+### 📝 Application Logs
 
-- **Security & Hygiene**  
-  - API keys and sensitive values are **excluded from log outputs**  
-  - Logs are rotated and archived periodically (based on configuration)
+- Python-based services (e.g., FastAPI, Flask) utilize the built-in `logging` module.
+- Logs are forwarded to Loki using **Promtail**.
+- Each log includes timestamps, severity level (INFO, WARNING, ERROR), and relevant context for debugging.
+
+### 🔧 Tools Used
+
+| Tool            | Purpose                   |
+|-----------------|---------------------------|
+| Grafana         | Dashboard and alerting    |
+| Loki            | Centralized log storage   |
+| Promtail        | Log shipping to Loki      |
+| Discord Webhook | Real-time notifications   |
+
+---
+
 
 ### Accessing Logs
 
@@ -334,34 +387,74 @@ This project implements a **centralized logging and monitoring system** using **
 
 ## 🗃️ Data Stored
 
-| Table Name       | Description                      |
-|------------------|----------------------------------|
-| roads_traffic     | Road metadata from Overpass API |
-| traffic_flow_data | Real-time traffic speed data    |
-| weather_conditions| Weather data per coordinate     |
+The following tables are created and managed by the system:
+
+| Table Name                        | Purpose                                                                                                |
+|-----------------------------------|--------------------------------------------------------------------------------------------------------|
+| `registered_devices.device_staging` | Stores initial registration information for IoT devices before full provisioning or for staging data.  |
+| `customers.customer_staging`        | Holds staging information for customers, linking them to their registered devices.                     |
+| `registered_devices.auth_tokens`    | Manages authentication tokens issued to devices for secure communication.                              |
+| `subscriptions.services`            | Defines the available services that devices can subscribe to, including their API keys and callbacks.  |
+| `subscriptions.subscribed_devices`  | Tracks active subscriptions, linking devices to the services they are currently using.                 |
+| `customers.error_events`            | Logs error events reported by devices,  used for CRM, support, and troubleshooting purposes.      |
 
 ---
 
+## 🚀 Future Scope
 
-## 📊 Future Scope
+This project serves as a strong foundation for simulating real-time IoT event-based ETL systems. Below are some future enhancements that can further elevate its capabilities:
 
-- **Advanced Analytics & ML Integration:**  
-  Implement predictive models for traffic congestion, accident risk zones, or weather-based route recommendations.
+### 🔁 1. **Real-Time Stream Processing**
 
-- **Real-Time Alert System:**  
-  Notify users of traffic anomalies or severe weather via email, SMS, or push notifications.
+* Integrate **Apache Flink** or **Spark Structured Streaming** to perform low-latency processing on telemetry data.
+* Enable complex event detection like anomaly spotting, pattern recognition, or sliding-window aggregations.
 
-- **Interactive Dashboard:**  
-  Integrate tools like Streamlit or Dash for live data visualization and insights.
+### 🤖 2. **Predictive Maintenance with Machine Learning**
 
-- **Scalability Enhancements:**  
-  Deploy to cloud platforms (AWS, GCP, or Azure) using Kubernetes and CI/CD pipelines for production readiness.
+* Train and deploy ML models to **predict equipment failures** using historical telemetry.
+* Schedule model training and inference using Airflow DAGs.
+* Send early warnings to subscribed services or CRM systems.
 
-- **API Gateway & Access Layer:**  
-  Build secure REST APIs for external systems to query real-time traffic insights.
+### ☁️ 3. **Cloud Integration & Data Lake**
 
-- **Data Lake Integration:**  
-  Archive historical traffic and weather data to a data lake for long-term analysis and trend forecasting.
+* Push data to cloud platforms like **AWS S3**, **Google Cloud Storage**, or **Azure Blob** for long-term storage.
+* Store telemetry in **Parquet** format with partitioning for better query performance and future analytics.
+
+### 📊 4. **Advanced Monitoring & Alerting**
+
+* Extend Grafana dashboards to include:
+
+  * Service health
+  * Kafka consumer lag
+  * Device-specific error trends
+* Integrate **Prometheus alerts** to notify on failures, lags, or inactive devices.
+
+### 📦 5. **CI/CD and DevOps**
+
+* Automate Docker builds and deployments using **GitHub Actions** or **GitLab CI**.
+* Ensure production-grade system reliability and faster iterations.
+
+### 🧑‍💻 6. **Admin & CRM Dashboard**
+
+* Build a **React/Next.js** based web interface to:
+
+  * Visualize live device errors
+  * Manage service subscriptions
+  * View device-to-customer mappings
+
+### 🔄 7. **Event Replay and Reprocessing**
+
+* Build a Kafka replay module for testing and backfilling ML or ETL jobs.
+* Useful for simulating new use cases on existing historical telemetry.
+
+### 🔐 8. **Enhanced Security**
+
+* Add authentication and authorization for:
+
+  * Device data ingestion
+  * Service registration and callbacks
+* Use JWT tokens or OAuth2 for secure communications.
+
 ---
 
 Remarks :

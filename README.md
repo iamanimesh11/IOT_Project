@@ -74,7 +74,7 @@ Real-time visualization of system metrics, device errors, and subscription statu
 | **Data Source** | Mock data generated via python | <img src="https://s3.dualstack.us-east-2.amazonaws.com/pythondotorg-assets/media/community/logos/python-logo-only.png" alt="Python" width="70"/>|
 | **Scheduler**  | Apache Airflow         | <img src="https://icon.icepanel.io/Technology/svg/Apache-Airflow.svg" alt="Airflow" width="70"/> |
 | **Streaming**  | Apache Kafka           | <img src="https://irisidea.com/wp-content/uploads/2024/04/kafka-implementation-experience--450x231.png" alt="Kafka" width="120"/> |
-| **Messaging Protocol** | MQTT (Eclipse Mosquitto) | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Mosquitto_Logo.svg/2560px-Mosquitto_Logo.svg.png" alt="MQTT" width="100"/> |
+| **Messaging Protocol** | MQTT (Eclipse Mosquitto) | <img src="[https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Mosquitto_Logo.svg/2560px-Mosquitto_Logo.svg.png](https://www.donskytech.com/wp-content/uploads/2023/02/Mqtt-hor.svg_.png)" alt="MQTT" width="100"/> |
 | **Storage**    | PostgreSQL             | <img src="https://www.logo.wine/a/logo/PostgreSQL/PostgreSQL-Logo.wine.svg" alt="PostgreSQL" width="120"/> |
 | **Logging**    | Grafana Loki           | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/2005px-Grafana_logo.svg.png" alt="Grafana Loki" width="100"/> |
 | **Memory Based Storage**    | Redis  | <img src="https://geelongwebdesign.com.au/wp-content/uploads/2025/04/redis-web-hosting-service-01.png" alt="Redis" width="100"/>|

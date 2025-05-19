@@ -2,6 +2,11 @@
 
 > 🛰️ An end-to-end real-time data engineering pipeline to simulate real-world IoT device events with scalable backend processing simulation, service subscriptions, and real-time event delivery to CRM  using modern data engineering tools.
 
+
+![Status](https://img.shields.io/badge/status-active--development-yellow)
+
+> 🚧 This project is currently under active development.
+
 ---
 **Remarks**:  
 In real-world Data Engineering projects, deploying a full-scale production setup can be costly. Therefore, for the purpose of showcasing, the entire infrastructure in this project is built and demonstrated locally using Docker — ensuring it's fully reproducible without incurring any extra cost.

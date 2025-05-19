@@ -21,7 +21,6 @@ In real-world Data Engineering projects, deploying a full-scale production setup
 - [Directory Structure](#directory-structure)
 - [Configurations](#configurations)
 - [Logging & Monitoring](#-logging--monitoring)
-- [Screenshots](#screenshots)
 - [Future Scope](#-future-scope)
 - [Author](#-author)
 
@@ -130,39 +129,41 @@ docker-compose up -d --build
 ├── .env
 ├── .gitattributes
 ├── .gitignore
+├── device_models.json
 ├── docker-compose.yml
 ├── Dockerfile
-└── README.md
+├── project summary.txt
+├── README.md
+└── temp.py
+├── idea
+│   ├── .gitignore
+│   ├── material_theme_project_new.xml
+│   ├── misc.xml
+│   ├── modules.xml
+│   ├── project_IOT_LG.iml
+│   └── vcs.xml
+│   ├── inspectionProfiles
+│   │   ├── profiles_settings.xml
+│   │   └── Project_Default.xml
 ├── additionals
 │   ├── backup.sqlc
 │   ├── project_structure.json
 │   ├── PROJECT_STRUCTURE.md
 │   ├── project_structure_json_creator.py
 │   └── text_Search.py
+├── asset
+│   └── workflow.gif
 ├── common
+│   ├── __init__ copy.py
 │   └── __init__.py
-│   ├── common
-│   │   ├── logging_and_monitoring
-│   │   │   ├── logs
-│   │   │   │   └── loki_errors.text
 │   ├── credentials
 │   │   ├── config.ini
-│   │   ├── firebase_cred.json
 │   │   └── red-button-442617-a9-89794f0a5b90.json
 │   ├── logging_and_monitoring
 │   │   ├── centralized_logging.py
 │   │   └── firebase_db_api_utils.log
-│   │   ├── logs
-│   │   │   ├── api_utils.log
-│   │   │   ├── database_connection.log
-│   │   │   ├── db_utils.log
-│   │   │   ├── firebase_db_api_utils.log
-│   │   │   ├── kafka_consumer.log
-│   │   │   ├── loki_errors.text
-│   │   │   ├── road_data_main.log
-│   │   │   ├── Road_Producer.log
-│   │   │   ├── Traffic_consumer.log
-│   │   │   └── Traffic_Producer.log
+│   ├── logs
+│   │   └── loki_errors.text
 │   ├── streamlit
 │   │   ├── database_logger dashboard-7-4.json
 │   │   ├── Dockerfile
@@ -184,17 +185,56 @@ docker-compose up -d --build
 │   │   ├── loki_files
 │   │   │   ├── log_sent _to_loki.py
 │   │   │   └── loki_request_python.py
+│   ├── test
+│   │   ├── device_models.json
+│   │   ├── readjson.py
+│   │   ├── t.html
+│   │   ├── temp.html
+│   │   └── tojson.py
 │   ├── utils
-│   │   ├── api_utils.py
-│   │   ├── config_loader.py.py
+│   │   ├── config.ini
 │   │   ├── Database_connection_Utils.py
-│   │   ├── db_utils.py
-│   │   ├── extract_Data_from_link_using_DIFFBOT.py
-│   │   ├── firebase_db_api_track_util.py
-│   │   ├── genai_text_Extracter.py
-│   │   ├── kafka_modify_Topics_utils.py
-│   │   └── trafficHelper_utils.py
+│   │   ├── service_registration.py
+│   │   └── __init__.py
+│   │   ├── Subscription
+│   │   │   ├── backend_subscription_consumer.py
+│   │   │   ├── bulk_subscribe.py
+│   │   │   ├── Database_connection_Utils.py
+│   │   │   └── POST subscribe Event.py
+│   │   ├── customer -database
+│   │   │   ├── create_kafka_topics.py
+│   │   │   ├── Customers_Tables_Creator.py
+│   │   │   └── generate_customer_data.py
+│   │   ├── get-devices
+│   │   │   ├── dynamic_Devices_Tables_creator.py
+│   │   │   ├── fastapi generates device data.py
+│   │   │   ├── get-devices from fastapi.py
+│   │   │   ├── staging_table_creation.py
+│   │   │   └── __init__.py
+│   │   ├── json_files
+│   │   │   ├── device_models.json
+│   │   │   └── device_profiles.json
+│   │   ├── kafka_handler
+│   │   │   ├── Dockerfile.kafka_controller
+│   │   │   ├── kafka_consumer.py
+│   │   │   ├── kafka_controller.py
+│   │   │   ├── mock_crm.py
+│   │   │   ├── requirements.txt
+│   │   │   └── webhook_receiver.py
+│   │   │   ├── Devices_processing_logic
+│   │   │   │   └── refrigerator_processing_logic.py
+│   │   │   ├── templates
+│   │   │   │   └── crm_dashboard.html
+│   │   ├── test-mqtt
+│   │   │   ├── controller.py
+│   │   │   ├── dockerfile
+│   │   │   ├── dockerfile_consumer_and_controller
+│   │   │   ├── generator.py
+│   │   │   ├── mqtt_consumer.py
+│   │   │   ├── requirements.txt
+│   │   │   └── __init__.py
 ├── config
+│   ├── db_initialize.sh
 │   ├── init-db.sql
 │   ├── loki-config.yml
 │   ├── loki.json
@@ -206,6 +246,16 @@ docker-compose up -d --build
 │   │   │   ├── Airflow Log Analytics.json
 │   │   │   ├── dashboard.yml
 │   │   │   └── ETL dashboard.json
+├── help notes
+│   ├── airflow_usage
+│   └── why mqtt and kafka both
+├── json_files
+│   └── device_models.json
+├── mosquitto
+│   ├── config
+│   │   └── mosquitto.conf
+│   ├── data
+│   ├── log
 ├── pipelines
 │   ├── airflow
 │   │   ├── airflow.cfg
@@ -214,10 +264,7 @@ docker-compose up -d --build
 │   │   ├── requirements.txt
 │   │   └── webserver_config.py
 │   │   ├── dags
-│   │   │   ├── DAG_kafka_road_producer.py
-│   │   │   ├── DAG_kafka_traffic_producer.py
 │   │   │   └── DAG_Monitor_ETL_health.py
-│   │   ├── plugins
 │   ├── kafka_files
 │   │   ├── Dockerfile
 │   │   ├── Dockerfile_consumer_traffic
@@ -228,10 +275,11 @@ docker-compose up -d --build
 │   │   ├── traffic_consumer.py
 │   │   ├── traffic_producer.py
 │   │   └── __init__.py
-│   ├── scripts
 ├── shared
+│   ├── info_collected.flag
+│   ├── start_logged.txt
+│   ├── user_info.json
 │   └── wait-for-flag.sh
-
 ```
 
 
@@ -326,12 +374,6 @@ This project implements a **centralized logging and monitoring system** using **
 | roads_traffic     | Road metadata from Overpass API |
 | traffic_flow_data | Real-time traffic speed data    |
 | weather_conditions| Weather data per coordinate     |
-
----
-
-
-## 📊 Future Scope
-Great! Here's a **"🚀 Future Scope"** section you can include in your README file to highlight the possible extensions and advanced features of your project:
 
 ---
 

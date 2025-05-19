@@ -1,3 +1,8 @@
+![Status](https://img.shields.io/badge/Status-🚧_Updating_Regularly-yellow?style=for-the-badge)
+![Progress](https://img.shields.io/badge/Progress-Work_in_Progress-blue?style=for-the-badge)
+![Maintenance](https://img.shields.io/badge/Maintained-Yes-brightgreen?style=for-the-badge)
+
+
 # ⚡ Real-Time IOT ETL for Reactive and Predective Maintenance
 
 > 🛰️ An end-to-end real-time data engineering pipeline to simulate real-world IoT device events with scalable backend processing simulation, service subscriptions, and real-time event delivery to CRM  using modern data engineering tools.
@@ -10,9 +15,6 @@ In real-world Data Engineering projects, deploying a full-scale production setup
 
 ---
 
-![Status](https://img.shields.io/badge/status-active--development-yellow)
-
-> 🚧 This project is currently under active development.
 
 
 ## 📚 Table of Contents

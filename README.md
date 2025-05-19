@@ -92,20 +92,6 @@ Real-time visualization of system metrics, device errors, and subscription statu
 
 # 🚀 Getting Started
 
-## ⚠️ IMPORTANT
-
-<p align="left">
-  <img src="https://img.freepik.com/free-vector/www-concept-illustration_114360-2143.jpg?t=st=1744565213~exp=1744568813~hmac=cc0420ee0ca016a8962950768146a9a73c652ef7e93dfd0f6be86f2c3eca7cb6&w=826" alt="API Status" width="200"/>
-</p>
-
-> Before cloning and running this project, **please ensure that the API is up and running.**
-
-🔗 **[Visit Project App](https://realtimeetlroadtrafficweather.vercel.app/#)**  
-Make sure the API is **not down** before proceeding.
-
-💡 Once the API is confirmed to be **live and functional**, you can go ahead and clone the repo, and run the project locally. 
-Just follow the steps below 👇
-
 
 ## ✅ Prerequisites
 

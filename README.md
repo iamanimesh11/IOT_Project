@@ -75,6 +75,8 @@ Real-time visualization of system metrics, device errors, and subscription statu
 | **Scheduler**  | Apache Airflow         | <img src="https://icon.icepanel.io/Technology/svg/Apache-Airflow.svg" alt="Airflow" width="70"/> |
 | **Streaming**  | Apache Kafka           | <img src="https://irisidea.com/wp-content/uploads/2024/04/kafka-implementation-experience--450x231.png" alt="Kafka" width="120"/> |
 | **Messaging Protocol** | MQTT (Eclipse Mosquitto) | <img src="https://www.donskytech.com/wp-content/uploads/2023/02/Mqtt-hor.svg_.png" alt="MQTT" width="100"/> |
+| **API Frameworks**     | FastAPI, Flask         | <img src="https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png" alt="FastAPI" width="90"/> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Flask_logo.svg/768px-Flask_logo.svg.png" alt="Flask" width="50"/> |
+
 | **Storage**    | PostgreSQL             | <img src="https://www.logo.wine/a/logo/PostgreSQL/PostgreSQL-Logo.wine.svg" alt="PostgreSQL" width="120"/> |
 | **Logging**    | Grafana Loki           | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/2005px-Grafana_logo.svg.png" alt="Grafana Loki" width="100"/> |
 | **Memory Based Storage**    | Redis  | <img src="https://geelongwebdesign.com.au/wp-content/uploads/2025/04/redis-web-hosting-service-01.png" alt="Redis" width="100"/>|

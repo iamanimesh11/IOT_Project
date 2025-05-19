@@ -324,38 +324,50 @@ Postgrsql Database initialized at startup of Postgresql container with default c
 ---
 
 
-## 📊 Logging & Monitoring
+## 📊 Logging and Monitoring
 
+To ensure visibility into the system's operations and health, this project integrates robust **logging** and **monitoring** mechanisms:
 
-This project implements a **centralized logging and monitoring system** using **Grafana Loki**, ensuring transparency, debuggability, and maintainability across all services.
+### 🔍 Logging with Grafana Loki
 
-### Key Highlights
+- All system logs, including data pipeline activities and API interactions, are streamed to **Grafana Loki**.
+- Logs are labeled by component (e.g., `airflow`, `fastapi`, `kafka`, `mqtt`) for easy filtering.
+- Structured logging (JSON format) is used where applicable to allow advanced querying in Grafana.
 
-- **Structured Logging**  
-  All Python scripts across Kafka producers/consumers, Airflow DAGs, and data pipelines generate structured logs with timestamp, service name, event type, and status.
+### 📈 Visualization with Grafana
 
-- **Centralized Collection with Grafana Loki**  
-  Logs from all services are collected and pushed to Loki using `Promtail`. These logs are accessible in real-time via **Grafana dashboards**.
+- **Grafana** dashboards provide real-time visual insights into:
+  - Task executions (success/failure counts)
+  - Kafka message flow and throughput
+  - API request/response times
+  - Redis cache hit/miss ratio
+  - MQTT connection status and message counts
+- Dashboards are customizable to add alerts, thresholds, and trend analysis.
 
-- **Dockerized Monitoring Stack**  
-  - `Grafana` for visualization  
-  - `Loki` for log storage  
-  - `Promtail` for log shipping  
-  These services are configured in `docker-compose.yml` with persistent volume storage.
+### 🚨 Alerting
 
-- **Real-Time Debugging**  
-  Logs include all critical operations such as:
-  - API calls (Overpass, TomTom, WeatherAPI)  
-  - Kafka message flow  
-  - Database operations (insert/update/failure)  
-  - Retry attempts and error messages  
+- Alerts are configured in Grafana to notify via **Discord** for:
+  - Task failures in Airflow
+  - Abnormal data trends or system errors
+  - Service downtime (e.g., Kafka broker or API unresponsive)
 
-- **Failover & Local Storage**  
-  In case of Grafana/Loki downtime, logs are safely written to local files and retried later to avoid data loss.
+### 📝 Application Logs
 
-- **Security & Hygiene**  
-  - API keys and sensitive values are **excluded from log outputs**  
-  - Logs are rotated and archived periodically (based on configuration)
+- Python-based services (e.g., FastAPI, Flask) utilize the built-in `logging` module.
+- Logs are forwarded to Loki using **Promtail**.
+- Each log includes timestamps, severity level (INFO, WARNING, ERROR), and relevant context for debugging.
+
+### 🔧 Tools Used
+
+| Tool            | Purpose                   |
+|-----------------|---------------------------|
+| Grafana         | Dashboard and alerting    |
+| Loki            | Centralized log storage   |
+| Promtail        | Log shipping to Loki      |
+| Discord Webhook | Real-time notifications   |
+
+---
+
 
 ### Accessing Logs
 

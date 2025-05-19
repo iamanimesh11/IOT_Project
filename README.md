@@ -1,7 +1,4 @@
 ![Status](https://img.shields.io/badge/Status-🚧_Updating_Regularly-yellow?style=for-the-badge)
-![Progress](https://img.shields.io/badge/Progress-Work_in_Progress-blue?style=for-the-badge)
-![Maintenance](https://img.shields.io/badge/Maintained-Yes-brightgreen?style=for-the-badge)
-
 
 # ⚡ Real-Time IOT ETL for Reactive and Predective Maintenance
 

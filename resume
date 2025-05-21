@@ -1,0 +1,229 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym} % Provides symbols like \Mobilefone, \Letter, etc. (though you use FontAwesome)
+\usepackage[table,xcdraw,usenames,dvipsnames]{xcolor}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{gray!50}\titlerule \vspace{-5pt}] % Use a gray color for the rule
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+% \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+%   \textbf{\href{http://sourabhbajaj.com/}{\Large Sourabh Bajaj}} & Email : \href{mailto:sourabh@sourabhbajaj.com}{sourabh@sourabhbajaj.com}\\
+%   \href{http://sourabhbajaj.com/}{http://www.sourabhbajaj.com} & Mobile : +1-123-456-7890 \\
+% \end{tabular*}
+
+\begin{center}
+    {\Huge \scshape Animesh Singh} \\ \vspace{1pt}
+    Grt. Noida ,UP,India \\ \vspace{1pt}
+    \small \raisebox{-0.1\height}\faPhone\ 9205461643 ~ \href{mailto:iamanimesh11june@gmail.com}{\raisebox{-0.2\height}\faEnvelope\  \underline{iamanimesh11june@gmail.com}} ~ 
+    \href{https://linkedin.com/in/animesh-singh11}{\raisebox{-0.2\height}\faLinkedin\ \underline{linkedin.com/in/animesh-singh11}}  ~
+    \href{https://github.com/}{\raisebox{-0.2\height}\faGithub\ \underline{github.com/animesh11}}
+    \vspace{-8pt}
+\end{center}
+
+%-----------SUMMARY-----------
+\vspace{5pt} % Add a little space after the header
+\textit{\small Aspiring Data Engineer skilled in Python, SQL, ETL processes, data pipeline design, database management (PostgreSQL, MySQL), workflow orchestration  and containerization with Docker. I am eager to leverage automation and data engineering skills to build robust data pipelines and contribute to impactful data-driven solutions.}
+\vspace{5pt} % Add a little space before the next section
+
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+{\small
+\begin{multicols}{2}
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+  \item \textbf{Languages:} Python, SQL, C\#, .NET, Shell Scripting
+  \item \textbf{Big Data Frameworks:} Apache Spark, Apache Kafka
+  \item \textbf{Databases:} PostgreSQL, SQL Server, Snowflake
+  \item \textbf{Cloud Platforms:} AWS S3, AWS EC2, AWS RDS
+  \item \textbf{Workflow/Orchestration:} Apache Airflow, UiPath Orchestrator
+  \item \textbf{DevOps/Monitoring:} Docker, Grafana Loki
+  \item \textbf{Messaging/Streaming:} Kafka, MQTT, Redis
+  \item \textbf{Visualization Tools:} Power BI, Grafana
+\end{itemize}
+\end{multicols}
+}
+
+
+
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {LG Electronics India}{April 2024 -- Current}
+      {Automation Testing and Development}{Noida, UP}
+      \resumeItemListStart
+        \resumeItem{Spearheaded the implementation of UiPath-driven automation initiatives within Factory Projects and potentially Finance departments, resulting in an 80\% increase in operational efficiency. }
+        \resumeItem{Developed and deployed an automated daily build and test reporting system, enhancing information accessibility and accuracy for relevant business units. .}
+        \resumeItem{Analyzed existing business processes in manufacturing and logistics to identify and prioritize automation opportunities suitable for RPA implementation.} % Added RPA Context 1
+        \resumeItem{Managed the deployment, scheduling, and performance of automation bots via UiPath Orchestrator, ensuring seamless integration with departmental workflows. }
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+\vspace{-10pt}
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{Real-Time IOT ETL for Reactive and Predective Maintenance} }{{ \href{https://my-profile-iamanimesh11s-projects.vercel.app/ETL_IOT_PROJECT/}{\raisebox{-0.2\height}\faGlobe\ \underline{Website}} \hspace{5pt} \href{https://github.com/iamanimesh11/IOT_Project/tree/main?tab=readme-ov-file}{\raisebox{-0.2\height}\faGithub\ \underline{GitHub}} }} \vspace{-17pt}
+      % Add technologies directly after the heading, perhaps slightly indented or styled
+      \item \small \hspace{0.22in} \textbf{Technologies:} \emph{Python, PostgreSQL, Airflow, Kafka,MQTT,Redis, Docker, Grafana Loki, Firebase} \vspace{-10pt}
+
+      \resumeItemListStart % Start the description points
+        \resumeItem{Architect and implemented a \textbf{containerized IoT telemetry pipeline} capable of simulating ingestion events from \textbf{10M+ smart devices} (e.g., Ref, WM, TVs), mimicking LG ThinQ platform architecture using MQTT and Kafka  }
+        \resumeItem{\textbf{Engineered a dynamic container orchestration mechanism} (Docker ) to auto-deploy device-type-specific services, ensuring \textbf{95\% resource efficiency} and scalable data segregation. }
+        \resumeItem{\textbf{Streamlined real-time Events flow} by forwarding telemetry from MQTT brokers to Kafka topics with minimal latency (<100ms), improving downstream processing throughput by \textbf{40\%}. }
+        \resumeItem{Enhanced system reliability and observability by ~85\% through centralized logging with Grafana Loki, visualized via Grafana dashboards, and integrated Discord alerting for proactive monitoring.}
+        \resumeItemListEnd
+\vspace{-15pt}
+
+         \resumeProjectHeading
+          {\textbf{Real-Time ETL of Road Traffic \& Weather Monitoring } }{{ \href{https://my-profile-iamanimesh11s-projects.vercel.app/ETL_ROAD_TRAFFIC_PROJECT/}{\raisebox{-0.2\height}\faGlobe\ \underline{Website}} \hspace{5pt} \href{https://github.com/iamanimesh11/Real-Time-ETL-of-Road-Traffic-Weather-Monitoring}{\raisebox{-0.2\height}\faGithub\ \underline{GitHub}} }}\vspace{-17pt}
+
+      % Add technologies directly after the heading, perhaps slightly indented or styled
+      \item \small \hspace{0.22in} \textbf{Technologies:} \emph{Python, PostgreSQL, Airflow, Kafka, Docker, Grafana Loki, Firebase} \vspace{-10pt}
+
+      \resumeItemListStart % Start the description points
+        \resumeItem{Built an end-to-end real-time data engineering pipeline that collects and processes 2500+ live API responses daily from Overpass, TomTom Traffic, and WeatherAPI.}
+        \resumeItem{Designed a decoupled ingestion architecture using Apache Kafka, enabling scalable, asynchronous data streaming into PostgreSQL structured data storage and Firebase for secure credential management.}
+        \resumeItem{Orchestrated ETL workflows, scheduling, and dependency management using Apache Airflow ensuring timely scheduling and fault-tolerant task execution.}
+        \resumeItem{Enhanced system reliability and observability by ~85\% through centralized logging with Grafana Loki, visualized via Grafana dashboards, and integrated Discord alerting for proactive monitoring.}
+        \resumeItem{Containerized all services using Docker Compose, implementing persistent storage and simplifying deployment processes for improved operational efficiency.}
+        \resumeItemListEnd
+        
+
+      % Removed the empty \resumeProjectHeading
+      % Removed negative vspace
+
+    \resumeSubHeadingListEnd
+% Removed negative vspace, adjust section spacing globally if needed
+
+
+%
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \item % Use a simple list item instead of \resumeSubheading
+      \textbf{Bachelor of Technology \textbar{} Galgotias University, Grt. Noida, UP} \hfill \textbf{\small Jun. 2020 -- May 2024}
+    \resumeItemListStart % Start the bullet points immediately after
+      \resumeItem{Major: Computer Science Engineering}
+      \resumeItem{CGPA: 8.0}
+    \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+
+
+\end{document}

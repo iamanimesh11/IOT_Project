@@ -119,8 +119,8 @@ Ensure that your system’s firewall or antivirus isn’t blocking Docker contai
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/animesh11singh/project_real_time_trafic_monitoring.git
-cd project_real_time_trafic_monitoring
+git clone https://github.com/iamanimesh11/IOT_Project.git
+
 ```
 ### Run in terminal
 

@@ -1,6 +1,6 @@
 ![Status](https://img.shields.io/badge/Status-🚧_Updating_Regularly-yellow?style=for-the-badge)
 
-# ⚡EventPulse   A Scalable Real-Time IoT Streaming & Monitoring System
+# ⚡EventPulse :  A Scalable Real-Time IoT Streaming & Monitoring System
 
 > 🛰️ An end-to-end real-time data engineering pipeline to simulate real-world IoT device events with scalable backend processing simulation, service subscriptions, and real-time event delivery to CRM  using modern data engineering tools.
 
